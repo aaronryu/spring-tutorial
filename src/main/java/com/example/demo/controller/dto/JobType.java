@@ -17,7 +17,11 @@ public enum JobType {
     DEVELOPER("Developer", Arrays.asList("Frontend", "Backend")),
     ENGINEER("Engineer", Arrays.asList("DevOps", "SRE"));
 
-    @JsonValue
     String name;
     List<String> titles;
+
+    @JsonValue
+    public String serialize() {
+        return String.format("명칭 : %s | 종류 : %s", this.name, titles.toString());
+    }
 }
