@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.controller.dto.JobType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ public class User {
     private Integer id;
     private String name;
     private Integer age;
-    private String job;
+    private JobType job;
     private String specialty;
     private LocalDateTime createdAt;
 }

@@ -19,7 +19,7 @@ public class UserResponseDto {
     private String name;
     @JsonIgnore
     private Integer age;
-    private String job;
+    private JobType job;
     private String specialty;
     @DateFormat
     private LocalDateTime createdAt;

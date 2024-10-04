@@ -16,6 +16,6 @@ public class UserCreateRequestDto {
     @Min(10)
     private Integer age;
     @NotNull
-    private String job;
+    private JobType job;
     private String specialty = "(empty)";
 }
