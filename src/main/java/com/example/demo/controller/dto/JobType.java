@@ -1,5 +1,6 @@
 package com.example.demo.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -20,4 +21,14 @@ public enum JobType {
 
     String name;
     List<String> titles;
+
+    @JsonCreator
+    public static JobType deserialize(String job) {
+        for (JobType each : JobType.values()) {
+            if (each.getName().equals(job)) {
+                return each;
+            }
+        }
+        throw new RuntimeException("JobType 내 해당하는 Enum 이 존재하지 않습니다. name : " + job);
+    }
 }
