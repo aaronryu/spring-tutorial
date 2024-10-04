@@ -1,6 +1,7 @@
 package com.example.demo.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,14 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum JobType {
+    @JsonProperty("Developer 개발자")
     DEVELOPER("Developer", Arrays.asList("Frontend", "Backend")),
+    @JsonProperty("Engineer 엔지니어")
     ENGINEER("Engineer", Arrays.asList("DevOps", "SRE"));
 
     String name;
     List<String> titles;
-
-    @JsonValue
-    public String serialize() {
-        return String.format("명칭 : %s | 종류 : %s", this.name, titles.toString());
-    }
 }
