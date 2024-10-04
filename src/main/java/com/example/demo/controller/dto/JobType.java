@@ -22,13 +22,13 @@ public enum JobType {
     String name;
     List<String> titles;
 
-    @JsonCreator
-    public static JobType deserialize(String job) {
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static JobType deserialize(String name) {
         for (JobType each : JobType.values()) {
-            if (each.getName().equals(job)) {
+            if (each.getName().equals(name)) {
                 return each;
             }
         }
-        throw new RuntimeException("JobType 내 해당하는 Enum 이 존재하지 않습니다. name : " + job);
+        throw new RuntimeException("JobType 내 해당하는 Enum 이 존재하지 않습니다. name : " + name);
     }
 }
