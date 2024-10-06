@@ -65,13 +65,13 @@ public class UserController {
     public BaseResponse<UserResponseDto> detailData(@RequestParam Integer id) {
         try {
             UserResponseDto user = userService.findById(id);
-            return BaseResponse.of(true, null, null, user);
+            return BaseResponse.success(user);
         } catch (CustomException e) {
             log.warn(e.getMessage(), e);
-            return BaseResponse.of(false, e.getType().getType(), e.getType().getDesc(), null);
+            return BaseResponse.failure(e.getType());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseResponse.of(false, ExceptionType.UNCLASSIFIED_ERROR.getType(), ExceptionType.UNCLASSIFIED_ERROR.getDesc(), null);
+            return BaseResponse.failure(ExceptionType.UNCLASSIFIED_ERROR);
         }
     }
 
@@ -80,13 +80,13 @@ public class UserController {
     public BaseResponse<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
         try {
             UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-            return BaseResponse.of(true, null, null, user);
+            return BaseResponse.success(user);
         } catch (CustomException e) {
             log.warn(e.getMessage(), e);
-            return BaseResponse.of(false, e.getType().getType(), e.getType().getDesc(), null);
+            return BaseResponse.failure(e.getType());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return BaseResponse.of(false, ExceptionType.UNCLASSIFIED_ERROR.getType(), ExceptionType.UNCLASSIFIED_ERROR.getDesc(), null);
+            return BaseResponse.failure(ExceptionType.UNCLASSIFIED_ERROR);
         }
     }
 }
