@@ -73,6 +73,11 @@ public class UserController {
 //                  .status(HttpStatusCode.valueOf(400))
                     .status(HttpStatus.BAD_REQUEST)
                     .body(null);
+        } catch (Exception e) {
+            return ResponseEntity
+//                  .status(HttpStatusCode.valueOf(500))
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
@@ -94,6 +99,11 @@ public class UserController {
             return ResponseEntity
 //                  .status(HttpStatusCode.valueOf(400))
                     .status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        } catch (Exception e) {
+            return ResponseEntity
+//                  .status(HttpStatusCode.valueOf(500))
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
     }
