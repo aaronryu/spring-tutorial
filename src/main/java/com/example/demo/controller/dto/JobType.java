@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Getter
 @AllArgsConstructor
@@ -29,6 +30,6 @@ public enum JobType {
                 return each;
             }
         }
-        throw new RuntimeException("JobType 내 해당하는 Enum 이 존재하지 않습니다. name : " + name);
+        throw new NoSuchElementException("JobType 내 해당하는 Enum 이 존재하지 않습니다. name : " + name);
     }
 }
