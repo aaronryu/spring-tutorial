@@ -28,4 +28,12 @@ public class BaseResponse<T> {
     public static <T> BaseResponse<T> failure(ExceptionType type) {
         return new BaseResponse<T>(false, type.getType(), type.getDesc(), null);
     }
+
+    public static <T> BaseResponse<T> failure(ExceptionType type, T body) {
+        return new BaseResponse<T>(false, type.getType(), type.getDesc(), body);
+    }
+
+    public static <T> BaseResponse<T> failure(ExceptionType type, String message) {
+        return new BaseResponse<T>(false, type.getType(), type.getDesc() + message, null);
+    }
 }
