@@ -2,7 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
+import com.example.demo.controller.dto.common.BaseResponse;
 import com.example.demo.exception.CustomException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.service.IRepository;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -60,49 +62,31 @@ public class UserController {
 
     @GetMapping("/data")
     @ResponseBody
-    public ResponseEntity<UserResponseDto> detailData(@RequestParam Integer id) {
+    public BaseResponse<UserResponseDto> detailData(@RequestParam Integer id) {
         try {
             UserResponseDto user = userService.findById(id);
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(200))
-                    .status(HttpStatus.OK)      // 1. HTTP Status Code
-                    .body(user);                // 2. 결과 객체(User)
+            return BaseResponse.of(true, null, null, user);
         } catch (CustomException e) {
             log.warn(e.getMessage(), e);
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(404))
-                    .status(e.getType().getStatus())
-                    .body(null);
+            return BaseResponse.of(false, e.getType().getType(), e.getType().getDesc(), null);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(500))
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            return BaseResponse.of(false, ExceptionType.UNCLASSIFIED_ERROR.getType(), ExceptionType.UNCLASSIFIED_ERROR.getDesc(), null);
         }
     }
 
     @PostMapping("")
     @ResponseBody
-    public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
+    public BaseResponse<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
         try {
             UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(201))
-                    .status(HttpStatus.CREATED) // 1. HTTP Status Code
-                    .body(user);                // 2. 결과 객체(User)
+            return BaseResponse.of(true, null, null, user);
         } catch (CustomException e) {
             log.warn(e.getMessage(), e);
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(404))
-                    .status(e.getType().getStatus())
-                    .body(null);
+            return BaseResponse.of(false, e.getType().getType(), e.getType().getDesc(), null);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(500))
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            return BaseResponse.of(false, ExceptionType.UNCLASSIFIED_ERROR.getType(), ExceptionType.UNCLASSIFIED_ERROR.getDesc(), null);
         }
     }
 }
