@@ -1,5 +1,7 @@
 package com.example.demo.controller.dto;
 
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.ExceptionType;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,6 +32,6 @@ public enum JobType {
                 return each;
             }
         }
-        throw new NoSuchElementException("JobType 내 해당하는 Enum 이 존재하지 않습니다. name : " + name);
+        throw new CustomException(ExceptionType.INVALID_INPUT, "JobType 내 해당하는 Enum 이 존재하지 않습니다. name : " + name);
     }
 }

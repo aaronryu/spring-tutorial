@@ -1,7 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.controller.dto.JobType;
-import com.example.demo.exception.UserNotFoundException;
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.ExceptionType;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class UserRepository implements IRepository<Integer, User> {
 
     public User findById(Integer id) {
         Optional<User> retrieved = Optional.ofNullable(users.get(id));
-        return retrieved.orElseThrow(() -> new UserNotFoundException("유저가 존재하지 않습니다. id : " + id));
+        return retrieved.orElseThrow(() -> new CustomException(ExceptionType.USER_NOT_FOUND, id));
     }
 
     public List<User> findAll() {

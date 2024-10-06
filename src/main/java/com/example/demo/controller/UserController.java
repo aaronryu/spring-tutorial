@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
-import com.example.demo.exception.UserNotFoundException;
+import com.example.demo.exception.CustomException;
 import com.example.demo.service.IRepository;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -12,7 +12,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,15 +63,10 @@ public class UserController {
 //                  .status(HttpStatusCode.valueOf(200))
                     .status(HttpStatus.OK)      // 1. HTTP Status Code
                     .body(user);                // 2. 결과 객체(User)
-        } catch (NoSuchElementException | UserNotFoundException e) {
+        } catch (CustomException e) {
             return ResponseEntity
 //                  .status(HttpStatusCode.valueOf(404))
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(null);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(400))
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(e.getType().getStatus())
                     .body(null);
         } catch (Exception e) {
             return ResponseEntity
@@ -91,15 +85,10 @@ public class UserController {
 //                  .status(HttpStatusCode.valueOf(201))
                     .status(HttpStatus.CREATED) // 1. HTTP Status Code
                     .body(user);                // 2. 결과 객체(User)
-        } catch (NoSuchElementException | UserNotFoundException e) {
+        } catch (CustomException e) {
             return ResponseEntity
 //                  .status(HttpStatusCode.valueOf(404))
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(null);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(400))
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(e.getType().getStatus())
                     .body(null);
         } catch (Exception e) {
             return ResponseEntity
