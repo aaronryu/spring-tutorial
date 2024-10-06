@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.service.IRepository;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -63,7 +64,7 @@ public class UserController {
 //                  .status(HttpStatusCode.valueOf(200))
                     .status(HttpStatus.OK)      // 1. HTTP Status Code
                     .body(user);                // 2. 결과 객체(User)
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | UserNotFoundException e) {
             return ResponseEntity
 //                  .status(HttpStatusCode.valueOf(404))
                     .status(HttpStatus.NOT_FOUND)
@@ -90,7 +91,7 @@ public class UserController {
 //                  .status(HttpStatusCode.valueOf(201))
                     .status(HttpStatus.CREATED) // 1. HTTP Status Code
                     .body(user);                // 2. 결과 객체(User)
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | UserNotFoundException e) {
             return ResponseEntity
 //                  .status(HttpStatusCode.valueOf(404))
                     .status(HttpStatus.NOT_FOUND)
