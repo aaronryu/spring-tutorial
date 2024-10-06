@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
@@ -62,10 +63,15 @@ public class UserController {
 //                  .status(HttpStatusCode.valueOf(200))
                     .status(HttpStatus.OK)      // 1. HTTP Status Code
                     .body(user);                // 2. 결과 객체(User)
-        } catch (RuntimeException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity
 //                  .status(HttpStatusCode.valueOf(404))
                     .status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+//                  .status(HttpStatusCode.valueOf(400))
+                    .status(HttpStatus.BAD_REQUEST)
                     .body(null);
         }
     }
@@ -73,10 +79,22 @@ public class UserController {
     @PostMapping("")
     @ResponseBody
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
-        UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-        return ResponseEntity
-//              .status(HttpStatusCode.valueOf(201))
-                .status(HttpStatus.CREATED) // 1. HTTP Status Code
-                .body(user);                // 2. 결과 객체(User)
+        try {
+            UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+            return ResponseEntity
+//                  .status(HttpStatusCode.valueOf(201))
+                    .status(HttpStatus.CREATED) // 1. HTTP Status Code
+                    .body(user);                // 2. 결과 객체(User)
+        } catch (NoSuchElementException e) {
+            return ResponseEntity
+//                  .status(HttpStatusCode.valueOf(404))
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+//                  .status(HttpStatusCode.valueOf(400))
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
     }
 }
