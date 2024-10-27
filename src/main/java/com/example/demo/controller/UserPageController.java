@@ -24,7 +24,7 @@ public class UserPageController {
     public String usersPage(Model model) {
         List<UserResponseDto> users = userService.findAll();
         model.addAttribute("users", users);
-        return "/users/list";
+        return "users/list";
     }
 
     @GetMapping("/{id}")
@@ -35,6 +35,6 @@ public class UserPageController {
         model.addAttribute("age", user.getAge());
         model.addAttribute("job", user.getJob());
         model.addAttribute("specialty", user.getSpecialty());
-        return "/users/detail";
+        return "users/detail";
     }
 }
