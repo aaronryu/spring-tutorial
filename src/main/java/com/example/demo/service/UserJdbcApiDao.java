@@ -19,15 +19,14 @@ public class UserJdbcApiDao {
     private final DataSource dataSource;
 
     public User findById(int userId) throws SQLException {
-        Connection connection = null;   // 1
-        Statement statement = null;     // 2
-        ResultSet resultSet = null;     // 3
+        Connection connection = null;           // 1
+        PreparedStatement statement = null;     // 2
+        ResultSet resultSet = null;             // 3
         try {
-            connection = dataSource.getConnection();    // 1
-            statement = connection.createStatement();   // 2
-            resultSet = statement.executeQuery(         // 3
-                    "SELECT * FROM \"user\" WHERE id = " + userId
-            );
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM \"user\" WHERE id = ?");
+            statement.setInt(1, userId);
+            resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return new User(
                         resultSet.getInt("id"),
@@ -53,15 +52,13 @@ public class UserJdbcApiDao {
     }
 
     public List<User> findAll() throws SQLException {
-        Connection connection = null;   // 1
-        Statement statement = null;     // 2
-        ResultSet resultSet = null;     // 3
+        Connection connection = null;           // 1
+        PreparedStatement statement = null;     // 2
+        ResultSet resultSet = null;             // 3
         try {
-            connection = dataSource.getConnection();    // 1
-            statement = connection.createStatement();   // 2
-            resultSet = statement.executeQuery(         // 3
-                    "SELECT * FROM \"user\""
-            );
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM \"user\"");
+            resultSet = statement.executeQuery();
             List<User> results = new ArrayList();
             while (resultSet.next()) {
                 results.add(
