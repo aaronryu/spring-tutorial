@@ -126,4 +126,15 @@ public class UserJdbcTemplateDao {
                 getUserParams
         );
     }
+
+    public void delete(int userId) {
+        String deleteUserQuery = "DELETE FROM \"user\" WHERE id = ? ";
+        Object[] deleteUserParams = new Object[]{
+                userId
+        };
+        this.jdbcTemplate.update(
+                deleteUserQuery,
+                deleteUserParams
+        );
+    }
 }

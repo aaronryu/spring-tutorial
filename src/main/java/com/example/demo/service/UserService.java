@@ -37,4 +37,8 @@ public class UserService {
         User user = userJdbcTemplateRepository.update(id, name, age, job, specialty);
         return UserResponseDto.from(user);
     }
+
+    public void delete(Integer id) {
+        userJdbcTemplateRepository.delete(id);
+    }
 }
