@@ -22,14 +22,10 @@ public class UserService {
     }
 
     public List<UserResponseDto> findAll() {
-        try {
-            return userJdbcRepository.findAll()
-                    .stream()
-                    .map(UserResponseDto::from)
-                    .toList();
-        } catch (SQLException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
-        }
+        return userJdbcTemplateRepository.findAll()
+                .stream()
+                .map(UserResponseDto::from)
+                .toList();
     }
 
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
