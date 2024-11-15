@@ -63,7 +63,7 @@ public class UserJdbcTemplateDao {
                 specialty,
                 LocalDateTime.now()
         };
-        this.jdbcTemplate.update(
+        int rowsAffected = this.jdbcTemplate.update(
                 createUserQuery,
                 createUserParams
         );
@@ -76,6 +76,40 @@ public class UserJdbcTemplateDao {
         // (C) SELECT USER
         String getUserQuery = "SELECT * FROM \"user\" WHERE id = ?";
         int getUserParams = createdUserId;
+        return this.jdbcTemplate.queryForObject(
+                getUserQuery,
+                (resultSet, rowNum) -> new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getInt("age"),
+                        resultSet.getString("job"),
+                        resultSet.getString("specialty"),
+                        resultSet.getTimestamp("created_at")
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime()
+                ),
+                getUserParams
+        );
+    }
+
+    public User update(int id, String name, Integer age, String job, String specialty) {
+        // (A) UPDATE USER
+        String updateUserQuery = "UPDATE \"user\" SET name = ?, age = ?, job = ?, specialty = ? WHERE id = ?";
+        Object[] updateUserParams = new Object[]{
+                name,
+                age,
+                job,
+                specialty,
+                id,
+        };
+        int rowsAffected = this.jdbcTemplate.update(
+                updateUserQuery,
+                updateUserParams
+        );
+        // (B) SELECT USER
+        String getUserQuery = "SELECT * FROM \"user\" WHERE id = ?";
+        int getUserParams = id;
         return this.jdbcTemplate.queryForObject(
                 getUserQuery,
                 (resultSet, rowNum) -> new User(

@@ -32,4 +32,9 @@ public class UserService {
         User user = userJdbcTemplateRepository.save(name, age, job, specialty);
         return UserResponseDto.from(user);
     }
+
+    public UserResponseDto update(Integer id, String name, Integer age, String job, String specialty) {
+        User user = userJdbcTemplateRepository.update(id, name, age, job, specialty);
+        return UserResponseDto.from(user);
+    }
 }
