@@ -22,34 +22,20 @@ public class UserController {
 
     @GetMapping("")
     public ResponseEntity<List<UserResponseDto>> users() {
-        try {
-            List<UserResponseDto> users = userService.findAll();
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(200))
-                    .status(HttpStatus.OK)      // 1. HTTP Status Code
-                    .body(users);               // 2. 결과 객체(List<User>)
-        } catch (RuntimeException e) {
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(404))
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(null);
-        }
+        List<UserResponseDto> users = userService.findAll();
+        return ResponseEntity
+//              .status(HttpStatusCode.valueOf(200))
+                .status(HttpStatus.OK)      // 1. HTTP Status Code
+                .body(users);               // 2. 결과 객체(List<User>)
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> user(@PathVariable Integer id) {
-        try {
-            UserResponseDto user = userService.findById(id);
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(200))
-                    .status(HttpStatus.OK)      // 1. HTTP Status Code
-                    .body(user);                // 2. 결과 객체(User)
-        } catch (RuntimeException e) {
-            return ResponseEntity
-//                  .status(HttpStatusCode.valueOf(404))
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(null);
-        }
+        UserResponseDto user = userService.findById(id);
+        return ResponseEntity
+//              .status(HttpStatusCode.valueOf(200))
+                .status(HttpStatus.OK)      // 1. HTTP Status Code
+                .body(user);                // 2. 결과 객체(User)
     }
 
     @PostMapping("")
