@@ -14,6 +14,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final UserJdbcApiDao userJdbcRepository;
+    private final MessageJdbcApiDao messageJdbcRepository;
     private final UserJdbcTemplateDao userJdbcTemplateRepository;
 
     public UserResponseDto findById(Integer id) {
@@ -29,8 +30,15 @@ public class UserService {
     }
 
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
-        User user = userJdbcTemplateRepository.save(name, age, job, specialty);
-        return UserResponseDto.from(user);
+        try {
+            User user = userJdbcRepository.save(name, age, job, specialty);
+            List<Message> messages = messageJdbcRepository.save(user.getId(), user.getName() + "님 가입을 환영합니다.");
+            UserResponseDto result = UserResponseDto.from(user);
+            result.setMessages(messages);
+            return result;
+        } catch (SQLException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
+        }
     }
 
     public UserResponseDto update(Integer id, String name, Integer age, String job, String specialty) {
