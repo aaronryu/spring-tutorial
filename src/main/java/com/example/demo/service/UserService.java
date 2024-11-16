@@ -3,8 +3,12 @@ package com.example.demo.service;
 import com.example.demo.controller.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,26 +40,30 @@ public class UserService {
     }
 
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
-        TransactionSynchronizationManager.initSynchronization();
-        Connection connection = DataSourceUtils.getConnection(dataSource);
+//      TransactionSynchronizationManager.initSynchronization();
+//      Connection connection = DataSourceUtils.getConnection(dataSource);
+        PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
 //          connection = dataSource.getConnection();    // Connection 생성
-            connection.setAutoCommit(false);            // Connection Auto-Commit 옵션 끄기
+//          connection.setAutoCommit(false);            // Connection Auto-Commit 옵션 끄기
             User user = userJdbcRepository.save(/* connection, */name, age, job, specialty);
             List<Message> messages = messageJdbcRepository.save(/* connection, */user.getId(), user.getName() + "님 가입을 환영합니다.");
-            connection.commit();                        // (A) Commit
+//          connection.commit();                        // (A) Commit
+            transactionManager.commit(status);          // (A) Commit - 트랜잭션 추상화
             UserResponseDto result = UserResponseDto.from(user);
             result.setMessages(messages);
             return result;
         } catch (SQLException e) {
-            try {
-                connection.rollback();                  // (B) Rollback
-            } catch (final SQLException ignored) {
-            }
+//          try {
+//              connection.rollback();                  // (B) Rollback
+//          } catch (final SQLException ignored) {
+//          }
+            transactionManager.rollback(status);        // (B) Rollback - 트랜잭션 추상화
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
-        } finally {
-            DataSourceUtils.releaseConnection(connection, dataSource);
-        }
+//      } finally {
+//          DataSourceUtils.releaseConnection(connection, dataSource);
+//      }
     }
 
     public UserResponseDto update(Integer id, String name, Integer age, String job, String specialty) {
