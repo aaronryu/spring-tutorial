@@ -3,7 +3,9 @@ package com.example.demo.service;
 import com.example.demo.controller.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
@@ -34,12 +36,13 @@ public class UserService {
     }
 
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
-        Connection connection = null;
+        TransactionSynchronizationManager.initSynchronization();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
         try {
-            connection = dataSource.getConnection();    // Connection 생성
+//          connection = dataSource.getConnection();    // Connection 생성
             connection.setAutoCommit(false);            // Connection Auto-Commit 옵션 끄기
-            User user = userJdbcRepository.save(connection, name, age, job, specialty);
-            List<Message> messages = messageJdbcRepository.save(connection, user.getId(), user.getName() + "님 가입을 환영합니다.");
+            User user = userJdbcRepository.save(/* connection, */name, age, job, specialty);
+            List<Message> messages = messageJdbcRepository.save(/* connection, */user.getId(), user.getName() + "님 가입을 환영합니다.");
             connection.commit();                        // (A) Commit
             UserResponseDto result = UserResponseDto.from(user);
             result.setMessages(messages);
@@ -51,10 +54,7 @@ public class UserService {
             }
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
         } finally {
-            try {
-                connection.close();                     // (C) Close
-            } catch (final SQLException ignored) {
-            }
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
