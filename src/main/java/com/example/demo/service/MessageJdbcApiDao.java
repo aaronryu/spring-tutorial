@@ -54,15 +54,15 @@ public class MessageJdbcApiDao {
         }
     }
 
-    public List<Message> save(Integer userId, String message) throws SQLException {
+    public List<Message> save(final Connection connection, Integer userId, String message) throws SQLException {
         if (true) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 롤백 여부를 확인하기 위한 의도된 예외");
         }
-        Connection connection = null;           // 1
+//      Connection connection = null;           // 1
         PreparedStatement statement = null;     // 2
         ResultSet resultSet = null;             // 3
         try {
-            connection = dataSource.getConnection();    // 1
+//          connection = dataSource.getConnection();    // 1
             // INSERT MESSAGE
             statement = connection.prepareStatement(    // (A)-2:Statement
                     "INSERT INTO \"message\" (user_id, message, created_at) VALUES (?, ?, ?)"
