@@ -24,6 +24,7 @@ public class UserService {
     private final UserJdbcApiDao userJdbcRepository;
     private final MessageJdbcApiDao messageJdbcRepository;
     private final UserJdbcTemplateDao userJdbcTemplateRepository;
+    private final MessageJdbcTemplateDao messageJdbcTemplateRepository;
 
     private final DataSource dataSource;
 
@@ -47,23 +48,23 @@ public class UserService {
         try {
 //          connection = dataSource.getConnection();    // Connection 생성
 //          connection.setAutoCommit(false);            // Connection Auto-Commit 옵션 끄기
-            User user = userJdbcRepository.save(/* connection, */name, age, job, specialty);
-            List<Message> messages = messageJdbcRepository.save(/* connection, */user.getId(), user.getName() + "님 가입을 환영합니다.");
+            User user = userJdbcTemplateRepository.save(/* connection, */name, age, job, specialty);
+            List<Message> messages = messageJdbcTemplateRepository.save(/* connection, */user.getId(), user.getName() + "님 가입을 환영합니다.");
 //          connection.commit();                        // (A) Commit
             transactionManager.commit(status);          // (A) Commit - 트랜잭션 추상화
             UserResponseDto result = UserResponseDto.from(user);
             result.setMessages(messages);
             return result;
-        } catch (SQLException e) {
+        } catch (Exception e) {
 //          try {
 //              connection.rollback();                  // (B) Rollback
 //          } catch (final SQLException ignored) {
 //          }
             transactionManager.rollback(status);        // (B) Rollback - 트랜잭션 추상화
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "자원 반납 시 문제가 있습니다.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 수행 시 실패");
 //      } finally {
 //          DataSourceUtils.releaseConnection(connection, dataSource);
-//      }
+        }
     }
 
     public UserResponseDto update(Integer id, String name, Integer age, String job, String specialty) {
