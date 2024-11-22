@@ -8,22 +8,25 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserController {
-    IUserService userServiceProxy;
+    IUserService userServiceJdkProxy;
 
     @GetMapping("")
     public ResponseEntity<List<UserResponseDto>> users() {
-        List<UserResponseDto> users = userServiceProxy.findAll();
+        log.info(userServiceJdkProxy.getClass().toString());
+        List<UserResponseDto> users = userServiceJdkProxy.findAll();
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(200))
                 .status(HttpStatus.OK)      // 1. HTTP Status Code
@@ -32,7 +35,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> user(@PathVariable Integer id) {
-        UserResponseDto user = userServiceProxy.findById(id);
+        log.info(userServiceJdkProxy.getClass().toString());
+        UserResponseDto user = userServiceJdkProxy.findById(id);
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(200))
                 .status(HttpStatus.OK)      // 1. HTTP Status Code
@@ -41,7 +45,8 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
-        UserResponseDto user = userServiceProxy.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        log.info(userServiceJdkProxy.getClass().toString());
+        UserResponseDto user = userServiceJdkProxy.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.CREATED) // 1. HTTP Status Code
@@ -50,7 +55,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> update(@PathVariable Integer id, @RequestBody @Valid UserCreateRequestDto request) {
-        UserResponseDto user = userServiceProxy.update(id, request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        log.info(userServiceJdkProxy.getClass().toString());
+        UserResponseDto user = userServiceJdkProxy.update(id, request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code
@@ -59,7 +65,8 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        userServiceProxy.delete(id);
+        log.info(userServiceJdkProxy.getClass().toString());
+        userServiceJdkProxy.delete(id);
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code
