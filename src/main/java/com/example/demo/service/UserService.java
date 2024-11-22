@@ -30,8 +30,16 @@ public class UserService {
     private final PlatformTransactionManager transactionManager;
 
     public UserResponseDto findById(Integer id) {
-        User user = userJdbcTemplateRepository.findById(id);
-        return UserResponseDto.from(user);
+        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            User user = userJdbcTemplateRepository.findById(id);
+            transactionManager.commit(status);          // (A) Commit - 트랜잭션 추상화
+            UserResponseDto result = UserResponseDto.from(user);
+            return result;
+        } catch (Exception e) {
+            transactionManager.rollback(status);        // (B) Rollback - 트랜잭션 추상화
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 수행 시 실패");
+        }
     }
 
     public List<UserResponseDto> findAll() {
