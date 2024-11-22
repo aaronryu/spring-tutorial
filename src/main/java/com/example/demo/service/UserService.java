@@ -27,6 +27,7 @@ public class UserService {
     private final MessageJdbcTemplateDao messageJdbcTemplateRepository;
 
     private final DataSource dataSource;
+    private final PlatformTransactionManager transactionManager;
 
     public UserResponseDto findById(Integer id) {
         User user = userJdbcTemplateRepository.findById(id);
@@ -43,7 +44,7 @@ public class UserService {
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
 //      TransactionSynchronizationManager.initSynchronization();
 //      Connection connection = DataSourceUtils.getConnection(dataSource);
-        PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+//      PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
         TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
 //          connection = dataSource.getConnection();    // Connection 생성
