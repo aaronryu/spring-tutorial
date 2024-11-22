@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
+import com.example.demo.service.IUserService;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -18,11 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserController {
-    UserService userService;
+    IUserService userServiceProxy;
 
     @GetMapping("")
     public ResponseEntity<List<UserResponseDto>> users() {
-        List<UserResponseDto> users = userService.findAll();
+        List<UserResponseDto> users = userServiceProxy.findAll();
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(200))
                 .status(HttpStatus.OK)      // 1. HTTP Status Code
@@ -31,7 +32,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> user(@PathVariable Integer id) {
-        UserResponseDto user = userService.findById(id);
+        UserResponseDto user = userServiceProxy.findById(id);
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(200))
                 .status(HttpStatus.OK)      // 1. HTTP Status Code
@@ -40,7 +41,7 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
-        UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        UserResponseDto user = userServiceProxy.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.CREATED) // 1. HTTP Status Code
@@ -49,7 +50,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> update(@PathVariable Integer id, @RequestBody @Valid UserCreateRequestDto request) {
-        UserResponseDto user = userService.update(id, request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        UserResponseDto user = userServiceProxy.update(id, request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code
@@ -58,7 +59,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        userService.delete(id);
+        userServiceProxy.delete(id);
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code

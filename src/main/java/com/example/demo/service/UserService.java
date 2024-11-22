@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final UserJdbcApiDao userJdbcRepository;
     private final MessageJdbcApiDao messageJdbcRepository;
@@ -30,16 +30,16 @@ public class UserService {
     private final PlatformTransactionManager transactionManager;
 
     public UserResponseDto findById(Integer id) {
-        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
+//      TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+//      try {
             User user = userJdbcTemplateRepository.findById(id);
-            transactionManager.commit(status);          // (A) Commit - 트랜잭션 추상화
+//          transactionManager.commit(status);          // (A) Commit - 트랜잭션 추상화
             UserResponseDto result = UserResponseDto.from(user);
             return result;
-        } catch (Exception e) {
-            transactionManager.rollback(status);        // (B) Rollback - 트랜잭션 추상화
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 수행 시 실패");
-        }
+//      } catch (Exception e) {
+//          transactionManager.rollback(status);        // (B) Rollback - 트랜잭션 추상화
+//          throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 수행 시 실패");
+//      }
     }
 
     public List<UserResponseDto> findAll() {
@@ -53,27 +53,27 @@ public class UserService {
 //      TransactionSynchronizationManager.initSynchronization();
 //      Connection connection = DataSourceUtils.getConnection(dataSource);
 //      PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
-        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
+//      TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+//      try {
 //          connection = dataSource.getConnection();    // Connection 생성
 //          connection.setAutoCommit(false);            // Connection Auto-Commit 옵션 끄기
             User user = userJdbcTemplateRepository.save(/* connection, */name, age, job, specialty);
             List<Message> messages = messageJdbcTemplateRepository.save(/* connection, */user.getId(), user.getName() + "님 가입을 환영합니다.");
 //          connection.commit();                        // (A) Commit
-            transactionManager.commit(status);          // (A) Commit - 트랜잭션 추상화
+//          transactionManager.commit(status);          // (A) Commit - 트랜잭션 추상화
             UserResponseDto result = UserResponseDto.from(user);
             result.setMessages(messages);
             return result;
-        } catch (Exception e) {
+//      } catch (Exception e) {
 //          try {
 //              connection.rollback();                  // (B) Rollback
 //          } catch (final SQLException ignored) {
 //          }
-            transactionManager.rollback(status);        // (B) Rollback - 트랜잭션 추상화
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 수행 시 실패");
+//          transactionManager.rollback(status);        // (B) Rollback - 트랜잭션 추상화
+//          throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "트랜잭션 수행 시 실패");
 //      } finally {
 //          DataSourceUtils.releaseConnection(connection, dataSource);
-        }
+//      }
     }
 
     public UserResponseDto update(Integer id, String name, Integer age, String job, String specialty) {
