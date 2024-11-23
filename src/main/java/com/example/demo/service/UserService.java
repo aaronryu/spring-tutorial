@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserService /* implements IUserService */ {
     private final UserRepository userRepository;
     private final UserJdbcApiDao userJdbcRepository;
     private final MessageJdbcApiDao messageJdbcRepository;

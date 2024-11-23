@@ -11,7 +11,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@Service
+// @Service
+/**
+ * CGLIB 사용을 위해 UserService 는 이제 더 이상 IUserService 를 사용하지 않기때문에
+ * IUserService 의 유일한 구현체인 UserServiceProxy 가 안에서 IUserService 구현체 Bean 을 찾을때 자기 자신을 참조하는
+ * Circular References 가 발생하니 IUserService Bean 빈 생성하지 않도록 @Service 를 코멘트 처리
+ */
 @RequiredArgsConstructor
 public class UserServiceProxy implements IUserService {
     private final IUserService userService;
