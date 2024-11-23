@@ -30,4 +30,12 @@ public class User {
     private String job;
     private String specialty;
     private LocalDateTime createdAt;
+
+    public User updatedFrom(String name, Integer age, String job, String specialty) {
+        this.name = name;
+        this.age = age;
+        this.job = job;
+        this.specialty = specialty;
+        return this;
+    }
 }
