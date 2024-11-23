@@ -34,12 +34,13 @@ public class MessageJdbcApiDao {
                 results.add(
                         new Message(
                                 resultSet.getInt("id"),
-                                resultSet.getInt("user_id"),
+//                              resultSet.getInt("user_id"),
                                 resultSet.getString("message"),
                                 resultSet.getTimestamp("created_at")
                                         .toInstant()
                                         .atZone(ZoneId.systemDefault())
-                                        .toLocalDateTime()
+                                        .toLocalDateTime(),
+                                null
                         )
                 );
             }
@@ -81,12 +82,13 @@ public class MessageJdbcApiDao {
                 results.add(
                         new Message(
                                 resultSet.getInt("id"),
-                                resultSet.getInt("user_id"),
+//                              resultSet.getInt("user_id"),
                                 resultSet.getString("message"),
                                 resultSet.getTimestamp("created_at")
                                         .toInstant()
                                         .atZone(ZoneId.systemDefault())
-                                        .toLocalDateTime()
+                                        .toLocalDateTime(),
+                                null
                         )
                 );
             }

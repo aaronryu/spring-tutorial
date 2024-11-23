@@ -41,12 +41,10 @@ public class UserService {
 
     @Transactional
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
-        User user = userRepository.save(new User(null, name, age, job, specialty, LocalDateTime.now()));
-        messageRepository.save(new Message(null, user.getId(), user.getName() + "님 가입을 환영합니다.", LocalDateTime.now()));
-        List<Message> messages = messageRepository.findByUserId(user.getId());
-        UserResponseDto result = UserResponseDto.from(user);
-        result.setMessages(messages);
-        return result;
+        User createdUser = userRepository.save(User.from(name, age, job, specialty));
+        Message registrationMessage = messageRepository.save(Message.from(createdUser, createdUser.getName() + "님 가입을 환영합니다."));
+        createdUser.addMessage(registrationMessage);
+        return UserResponseDto.from(createdUser);
     }
 
     @Transactional

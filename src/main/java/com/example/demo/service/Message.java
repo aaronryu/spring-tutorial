@@ -1,12 +1,10 @@
 package com.example.demo.service;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Getter
 @Entity
@@ -16,7 +14,16 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer userId;
+//  @Column(name = "user_id")
+//  private Integer userId;
     private String message;
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public static Message from(User user, String message) {
+        return new Message(null, message, LocalDateTime.now(), user);
+    }
 }

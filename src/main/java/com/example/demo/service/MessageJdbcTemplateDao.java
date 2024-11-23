@@ -24,12 +24,13 @@ public class MessageJdbcTemplateDao {
                 getMessagesQuery,
                 (resultSet, rowNum) -> new Message(
                         resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
+//                      resultSet.getInt("user_id"),
                         resultSet.getString("message"),
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                                .toLocalDateTime(),
+                        null
                 ),
                 getMessagesParams
         ).toList();
@@ -57,12 +58,13 @@ public class MessageJdbcTemplateDao {
                 getMessagesQuery,
                 (resultSet, rowNum) -> new Message(
                         resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
+//                      resultSet.getInt("user_id"),
                         resultSet.getString("message"),
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                                .toLocalDateTime(),
+                        null
                 ),
                 getMessagesParams
         ).toList();

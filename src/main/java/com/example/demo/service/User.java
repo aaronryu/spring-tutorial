@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
+import jakarta.persistence.*;
 import lombok.*;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Entity
@@ -30,6 +30,17 @@ public class User {
     private String job;
     private String specialty;
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Message> messages;
+
+    public static User from(String name, Integer age, String job, String specialty) {
+        return new User(null, name, age, job, specialty, LocalDateTime.now(), new ArrayList<>());
+    }
+
+    public void addMessage(Message messages) {
+        this.messages.add(messages);
+    }
 
     public User updatedFrom(String name, Integer age, String job, String specialty) {
         this.name = name;
