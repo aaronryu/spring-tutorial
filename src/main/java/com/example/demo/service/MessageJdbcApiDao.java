@@ -34,7 +34,7 @@ public class MessageJdbcApiDao {
                 results.add(
                         new Message(
                                 resultSet.getInt("id"),
-//                              resultSet.getInt("user_id"),
+                                resultSet.getInt("user_id"),
                                 resultSet.getString("message"),
                                 resultSet.getTimestamp("created_at")
                                         .toInstant()
@@ -82,7 +82,7 @@ public class MessageJdbcApiDao {
                 results.add(
                         new Message(
                                 resultSet.getInt("id"),
-//                              resultSet.getInt("user_id"),
+                                resultSet.getInt("user_id"),
                                 resultSet.getString("message"),
                                 resultSet.getTimestamp("created_at")
                                         .toInstant()

@@ -14,16 +14,16 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-//  @Column(name = "user_id")
-//  private Integer userId;
+    @Column(name = "user_id")
+    private Integer userId;
     private String message;
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    public static Message from(User user, String message) {
-        return new Message(null, message, LocalDateTime.now(), user);
+    public static Message from(Integer userId, String message) {
+        return new Message(null, userId, message, LocalDateTime.now(), null);
     }
 }
