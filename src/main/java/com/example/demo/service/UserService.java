@@ -20,17 +20,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService /* implements IUserService */ {
-    private UserRepository userRepository;
-    private UserJdbcApiDao userJdbcRepository;
-    private MessageJdbcApiDao messageJdbcRepository;
-    private UserJdbcTemplateDao userJdbcTemplateRepository;
-    private MessageJdbcTemplateDao messageJdbcTemplateRepository;
+    private final UserRepository userRepository;
+    private final UserJdbcApiDao userJdbcRepository;
+    private final MessageJdbcApiDao messageJdbcRepository;
+    private final UserJdbcTemplateDao userJdbcTemplateRepository;
+    private final MessageJdbcTemplateDao messageJdbcTemplateRepository;
 
-    private DataSource dataSource;
-    private PlatformTransactionManager transactionManager;
+    private final DataSource dataSource;
+    private final PlatformTransactionManager transactionManager;
 
     public UserResponseDto findById(Integer id) {
 //      TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());

@@ -20,12 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserController {
-    UserService userServiceCglibProxy;
+    UserService userService;
 
     @GetMapping("")
     public ResponseEntity<List<UserResponseDto>> users() {
-        log.info(userServiceCglibProxy.getClass().toString());
-        List<UserResponseDto> users = userServiceCglibProxy.findAll();
+        log.info(userService.getClass().toString());
+        List<UserResponseDto> users = userService.findAll();
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(200))
                 .status(HttpStatus.OK)      // 1. HTTP Status Code
@@ -34,8 +34,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> user(@PathVariable Integer id) {
-        log.info(userServiceCglibProxy.getClass().toString());
-        UserResponseDto user = userServiceCglibProxy.findById(id);
+        log.info(userService.getClass().toString());
+        UserResponseDto user = userService.findById(id);
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(200))
                 .status(HttpStatus.OK)      // 1. HTTP Status Code
@@ -44,8 +44,8 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserCreateRequestDto request) {
-        log.info(userServiceCglibProxy.getClass().toString());
-        UserResponseDto user = userServiceCglibProxy.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        log.info(userService.getClass().toString());
+        UserResponseDto user = userService.save(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.CREATED) // 1. HTTP Status Code
@@ -54,8 +54,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> update(@PathVariable Integer id, @RequestBody @Valid UserCreateRequestDto request) {
-        log.info(userServiceCglibProxy.getClass().toString());
-        UserResponseDto user = userServiceCglibProxy.update(id, request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        log.info(userService.getClass().toString());
+        UserResponseDto user = userService.update(id, request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code
@@ -64,8 +64,8 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        log.info(userServiceCglibProxy.getClass().toString());
-        userServiceCglibProxy.delete(id);
+        log.info(userService.getClass().toString());
+        userService.delete(id);
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code

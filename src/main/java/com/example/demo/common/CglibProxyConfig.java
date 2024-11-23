@@ -15,12 +15,12 @@ public class CglibProxyConfig {
     private final UserService userService;
     private final PlatformTransactionManager transactionManager;
 
-    @Bean
-    public UserService userServiceCglibProxy() {
-        UserService userServiceProxy = (UserService) Enhancer.create(
-                UserService.class,                                          // Class "superclass"
-                new CglibProxyHandler(userService, transactionManager)           // MethodInterceptor "callback"
-        );
-        return userServiceProxy;
-    }
+//  @Bean
+//  public UserService userServiceCglibProxy() {
+//      UserService userServiceProxy = (UserService) Enhancer.create(
+//              UserService.class,                                          // Class "superclass"
+//              new CglibProxyHandler(userService, transactionManager)           // MethodInterceptor "callback"
+//      );
+//      return userServiceProxy;
+//  }
 }
