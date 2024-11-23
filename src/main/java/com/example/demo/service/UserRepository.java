@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,48 +15,18 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Slf4j
 @Repository
-@RequiredArgsConstructor
-public class UserRepository implements IRepository<Integer, User> {
-    @PersistenceContext
-    private EntityManager entityManager;
+public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Transactional
-    public Optional<User> findById(Integer id) {
-        String jpql = "SELECT user From User user where user.id = :id";
-        TypedQuery<User> typedQuery = entityManager.createQuery(jpql, User.class);
-        typedQuery.setParameter("id", id);
-        User user = typedQuery.getSingleResult();
-        return Optional.ofNullable(user);
-    }
+    Optional<User> findById(Integer id);
 
     @Transactional
-    public List<User> findAll() {
-        String jpql = "SELECT user From User user";
-        List<User> users = entityManager.createQuery(jpql, User.class).getResultList();
-        return users;
-    }
+    List<User> findAll();
 
     @Transactional
-    public User save(User entity) {
-        // INSERT
-        entityManager.persist(entity); // 영구저장
-        entityManager.flush();
-        Integer createdUserId = entity.getId();
-        // SELECT
-        String jpql = "SELECT user From User user where user.id = :id";
-        TypedQuery<User> typedQuery = entityManager.createQuery(jpql, User.class);
-        typedQuery.setParameter("id", createdUserId);
-        User user = typedQuery.getSingleResult();
-        return user;
-    }
+    User save(User entity);
 
     @Transactional
-    public void deleteById(Integer id) {
-        String jpql = "DELETE From User where id = :id";
-        TypedQuery<User> typedQuery = entityManager.createQuery(jpql, User.class);
-        typedQuery.setParameter("id", id);
-        typedQuery.executeUpdate();
-    }
+    void deleteById(Integer id);
 }
