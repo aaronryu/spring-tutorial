@@ -39,8 +39,7 @@ public class UserJdbcApiDao {
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime(),
-                        null
+                                .toLocalDateTime()
                 );
             }
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "유저 정보가 존재하지 않습니다 - id : " + userId);
@@ -74,8 +73,7 @@ public class UserJdbcApiDao {
                                 resultSet.getTimestamp("created_at")
                                         .toInstant()
                                         .atZone(ZoneId.systemDefault())
-                                        .toLocalDateTime(),
-                                null
+                                        .toLocalDateTime()
                         )
                 );
             }
@@ -131,8 +129,7 @@ public class UserJdbcApiDao {
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime(),
-                        null
+                                .toLocalDateTime()
                 );
             }
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "유저 정보가 저장되지 않았습니다 - id : " + createdUserId);

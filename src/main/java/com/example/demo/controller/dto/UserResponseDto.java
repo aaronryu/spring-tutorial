@@ -40,9 +40,7 @@ public class UserResponseDto {
                 entity.getCreatedAt(),
                 null,
                 null,
-                entity.getMessages().stream()
-                        .map(MessageResponseDto::from)
-                        .toList()
+                null
         );
     }
 
