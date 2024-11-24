@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
+@NamedEntityGraph(name = "User.findAllWithMessages", attributeNodes = @NamedAttributeNode("messages"))
 public class User {
     /**
      * JPA 통한 Database 사용 시 @GeneratedValue 전략에 대해 조금 상세히 알 필요가 있다.

@@ -25,7 +25,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Transactional
 //  @Query("SELECT user FROM User user LEFT JOIN FETCH user.messages")
-    @EntityGraph(attributePaths = {"messages"})
+//  @EntityGraph(attributePaths = {"messages"})
+    @EntityGraph("User.findAllWithMessages")
     List<User> findAll();
 
     @Transactional
