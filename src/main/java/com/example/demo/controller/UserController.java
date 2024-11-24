@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.dto.MessageResponseDto;
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
+import com.example.demo.service.MessageService;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -21,6 +23,7 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserController {
     UserService userService;
+    MessageService messageService;
 
     @GetMapping("")
     public ResponseEntity<List<UserResponseDto>> users() {
@@ -70,5 +73,15 @@ public class UserController {
 //              .status(HttpStatusCode.valueOf(201))
                 .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code
                 .body(null);                // 2. 결과 객체(User)
+    }
+
+    @GetMapping("/{id}/messages")
+    public ResponseEntity<List<MessageResponseDto>> messages(@PathVariable Integer id) {
+        log.info(userService.getClass().toString());
+        List<MessageResponseDto> messages = messageService.findByUserId(id);
+        return ResponseEntity
+//              .status(HttpStatusCode.valueOf(200))
+                .status(HttpStatus.OK)      // 1. HTTP Status Code
+                .body(messages);             // 2. 결과 객체(List<User>)
     }
 }
