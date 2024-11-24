@@ -35,7 +35,8 @@ public class UserService {
 
     @Transactional
     public List<UserResponseDto> findByName(String name) {
-        List<User> users = userRepositorySupport.findByName(name);
+//      List<User> users = userRepositorySupport.findByName(name);
+        List<User> users = userRepository.findByName(name);
         return users.stream()
                 .map(UserResponseDto::from)
                 .toList();
