@@ -27,15 +27,14 @@ public class UserService {
     public UserResponseDto findById(Integer id) {
         User retrievedUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다. id : " + id));
-        List<Message> messages = messageRepository.findByUserId(retrievedUser.getId());
         UserResponseDto result = UserResponseDto.from(retrievedUser);
-        result.setMessages(messages);
         return result;
     }
 
     @Transactional
     public List<UserResponseDto> findAll() {
-        return userRepository.findAll()
+        List<User> users = userRepository.findAll();
+        return users
                 .stream()
                 .map(UserResponseDto::from)
                 .toList();
@@ -44,7 +43,8 @@ public class UserService {
     @Transactional
     public UserResponseDto save(String name, Integer age, String job, String specialty) {
         User createdUser = userRepository.save(User.from(name, age, job, specialty));
-        messageRepository.save(Message.from(createdUser.getId(), createdUser.getName() + "님 가입을 환영합니다."));
+        Message message = messageRepository.save(Message.from(createdUser.getId(), createdUser.getName() + "님 가입을 환영합니다."));
+        createdUser.addMessage(message);
         return UserResponseDto.from(createdUser);
     }
 

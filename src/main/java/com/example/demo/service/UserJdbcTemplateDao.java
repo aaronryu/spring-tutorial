@@ -29,7 +29,8 @@ public class UserJdbcTemplateDao {
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                                .toLocalDateTime(),
+                        null
                 ),
                 getUserParams
         );
@@ -48,7 +49,8 @@ public class UserJdbcTemplateDao {
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                                .toLocalDateTime(),
+                        null
                 )
         ).toList();
     }
@@ -87,7 +89,8 @@ public class UserJdbcTemplateDao {
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                                .toLocalDateTime(),
+                        null
                 ),
                 getUserParams
         );
@@ -121,7 +124,8 @@ public class UserJdbcTemplateDao {
                         resultSet.getTimestamp("created_at")
                                 .toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                                .toLocalDateTime(),
+                        null
                 ),
                 getUserParams
         );
