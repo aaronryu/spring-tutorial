@@ -59,6 +59,9 @@ public class UserService {
 
     @Transactional
     public void delete(Integer id) {
-        userRepository.deleteById(id);
+//      userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저 정보가 존재하지 않았습니다 - id : " + id));
+        userRepository.delete(user);
     }
 }
