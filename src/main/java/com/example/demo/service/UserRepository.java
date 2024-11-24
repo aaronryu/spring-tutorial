@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findById(Integer id);
 
     @Transactional
+    @Query("SELECT user FROM User user LEFT JOIN FETCH user.messages")
     List<User> findAll();
 
     @Transactional
