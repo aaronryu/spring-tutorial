@@ -32,6 +32,7 @@ public class User {
     private String specialty;
     private LocalDateTime createdAt;
 
+    @Setter
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Message> messages;
 

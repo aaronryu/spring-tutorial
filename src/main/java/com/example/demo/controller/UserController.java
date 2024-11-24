@@ -84,4 +84,14 @@ public class UserController {
                 .status(HttpStatus.OK)      // 1. HTTP Status Code
                 .body(messages);             // 2. 결과 객체(List<User>)
     }
+
+    @PatchMapping("/{id}/messages/delete")
+    public ResponseEntity<Void> deleteMessages(@PathVariable Integer id) {
+        log.info(userService.getClass().toString());
+        userService.deleteMessages(id);
+        return ResponseEntity
+//              .status(HttpStatusCode.valueOf(201))
+                .status(HttpStatus.ACCEPTED) // 1. HTTP Status Code
+                .body(null);                // 2. 결과 객체(User)
+    }
 }
