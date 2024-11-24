@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 
@@ -26,9 +27,11 @@ public class UserController {
     MessageService messageService;
 
     @GetMapping("")
-    public ResponseEntity<List<UserResponseDto>> users() {
+    public ResponseEntity<List<UserResponseDto>> users(@RequestParam(required = false) String name) {
         log.info(userService.getClass().toString());
-        List<UserResponseDto> users = userService.findAll();
+        List<UserResponseDto> users = StringUtils.isEmpty(name)
+                ? userService.findAll()
+                : userService.findByName(name);
         return ResponseEntity
 //              .status(HttpStatusCode.valueOf(200))
                 .status(HttpStatus.OK)      // 1. HTTP Status Code

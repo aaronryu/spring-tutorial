@@ -22,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserRepositorySupport userRepositorySupport;
     private final MessageRepository messageRepository;
 
     @Transactional
@@ -30,6 +31,14 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다. id : " + id));
         UserResponseDto result = UserResponseDto.from(retrievedUser);
         return result;
+    }
+
+    @Transactional
+    public List<UserResponseDto> findByName(String name) {
+        List<User> users = userRepositorySupport.findByName(name);
+        return users.stream()
+                .map(UserResponseDto::from)
+                .toList();
     }
 
     @Transactional
