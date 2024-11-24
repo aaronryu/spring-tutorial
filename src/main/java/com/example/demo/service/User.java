@@ -33,7 +33,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @Setter
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Message> messages;
 
     public static User from(String name, Integer age, String job, String specialty) {

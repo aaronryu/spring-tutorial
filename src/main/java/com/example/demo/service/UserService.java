@@ -70,6 +70,9 @@ public class UserService {
     public void deleteMessages(Integer id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저 정보가 존재하지 않았습니다 - id : " + id));
-        user.setMessages(Collections.emptyList());
+//      user.setMessages(Collections.emptyList());      // 기존 Collection 에 대해서 참조(Reference, 주소)를 아예 지워버리는것이아니라 = cascade="all-delete-orphan" 불가
+        List<Message> messages = user.getMessages();    // 기존 Collection 이 갖는 참조(Reference, 주소)는 유지한채 그 내부의 값만 없애야한다.
+        messages.clear();
+//      user.setMessages(messages);                     // 이 구문은 굳이 필요는 없다. 어자피 user 는 messages 를 참조하고있었으니
     }
 }
