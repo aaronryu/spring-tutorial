@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body>
+    <h2>Main</h2>
+    <hr>
+
+    <form id="logout" action="/logout" method="POST">
+        <button type="submit">Logout</button>
+        <button onclick="location.href='/login'" type="button">Login</button>
+    </form>
+    <br>
+</body>
+<style>
+    body {
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    label {
+        display: inline-block;
+        width: 80px;
+        text-align: right;
+        padding-bottom: 4px;
+    }
+
+    button {
+        border-radius: 8px;
+        padding: 0.4em 0.8em;
+        cursor: pointer;
+    }
+</style>
+</html>
