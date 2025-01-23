@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -16,9 +17,15 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin((auth) -> auth.disable());
-        http.httpBasic((auth) -> auth.disable());
+        http.formLogin(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
+        http.httpBasic(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
+        http.csrf(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
 
+//      http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN"));
+//      http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/*")).hasRole());
+        http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
+//      http.formLogin(Customizer.withDefaults())
+        http.formLogin(form -> form.loginPage("/login").permitAll());
         return http.build();
     }
 }

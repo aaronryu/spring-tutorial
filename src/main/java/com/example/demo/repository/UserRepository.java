@@ -30,6 +30,12 @@ public class UserRepository implements IRepository<User, Integer> {
         return Optional.ofNullable(users.get(id));
     }
 
+    public Optional<User> findByUsername(String username) {
+        return users.values().stream()
+                .filter(item -> item.getName().equalsIgnoreCase(username))
+                .findAny();
+    }
+
     public List<User> findAll() {
         return users.values().stream().toList();
     }
