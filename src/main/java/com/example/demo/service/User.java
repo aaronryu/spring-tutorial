@@ -15,7 +15,7 @@ public class User {
     private Integer id;
     private String name;
     private Integer age;
-    private String job;
+    private JobType job;
     private String specialty;
     private LocalDateTime createdAt;
 }
