@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService /* implements UserDetailsService */ {
+public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    /* @Override */
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User retrieved = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 유저입니다 - username : " + username));

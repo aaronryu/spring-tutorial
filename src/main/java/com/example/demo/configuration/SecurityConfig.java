@@ -45,11 +45,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails aaron = User.withUsername("aaron").password(passwordEncoder.encode("456")).roles("USER", "ADMIN").build();
-        UserDetails baron = User.withUsername("baron").password(passwordEncoder.encode("456")).roles("USER").build();
-        UserDetails caron = User.withUsername("caron").password(passwordEncoder.encode("456")).roles("USER").build();
-        return new InMemoryUserDetailsManager(aaron, baron, caron);
-    }
+//  @Bean
+//  public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+//      UserDetails aaron = User.withUsername("aaron").password(passwordEncoder.encode("456")).roles("USER", "ADMIN").build();
+//      UserDetails baron = User.withUsername("baron").password(passwordEncoder.encode("456")).roles("USER").build();
+//      UserDetails caron = User.withUsername("caron").password(passwordEncoder.encode("456")).roles("USER").build();
+//      return new InMemoryUserDetailsManager(aaron, baron, caron);
+//  }
 }
