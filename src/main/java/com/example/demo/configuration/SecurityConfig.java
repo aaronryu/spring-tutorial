@@ -1,5 +1,6 @@
 package com.example.demo.configuration;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,15 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
 //      http.formLogin(Customizer.withDefaults())
         http.formLogin(form -> form.loginPage("/login").permitAll());
+
+        http.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .addLogoutHandler((request, response, authentication) -> {
+                    HttpSession session = request.getSession();
+                    session.invalidate();
+                })
+        );
         return http.build();
     }
 }
