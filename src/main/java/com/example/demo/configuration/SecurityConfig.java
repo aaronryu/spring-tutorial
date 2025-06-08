@@ -31,10 +31,11 @@ public class SecurityConfig {
         http.logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
-                .addLogoutHandler((request, response, authentication) -> {
-                    HttpSession session = request.getSession();
-                    session.invalidate();
-                })
+                .invalidateHttpSession(true)
+//              .addLogoutHandler((request, response, authentication) -> {
+//                  HttpSession session = request.getSession();
+//                  session.invalidate();
+//              })
         );
         return http.build();
     }
