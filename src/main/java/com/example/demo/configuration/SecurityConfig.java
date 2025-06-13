@@ -22,6 +22,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomAuthenticationProvider authenticationProvider;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,6 +48,10 @@ public class SecurityConfig {
 //                  HttpSession session = request.getSession();
 //                  session.invalidate();
 //              })
+        );
+
+        http.exceptionHandling(except -> except
+                .authenticationEntryPoint(authenticationEntryPoint)
         );
         return http.build();
     }
