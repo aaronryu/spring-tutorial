@@ -24,6 +24,7 @@ public class SecurityConfig {
     private final CustomAuthenticationProvider authenticationProvider;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomLogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,6 +43,7 @@ public class SecurityConfig {
         http.logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
+                .logoutSuccessHandler(logoutSuccessHandler)
                 .clearAuthentication(true)
 //              .invalidateHttpSession(true)
 //              .addLogoutHandler((request, response, authentication) -> {
