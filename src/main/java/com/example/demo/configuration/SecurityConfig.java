@@ -35,6 +35,7 @@ public class SecurityConfig {
 //      http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
 //      http.formLogin(Customizer.withDefaults())
         http.formLogin(form -> form.loginPage("/login").permitAll());
+        http.httpBasic(Customizer.withDefaults());
 
         http.logout(logout -> logout
                 .logoutUrl("/logout")
