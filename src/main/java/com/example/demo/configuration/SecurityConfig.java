@@ -31,7 +31,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/")).permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/mypage")).authenticated());
-        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/admin")).hasRole("ADMIN"));
+        http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN"));
 //      http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
 //      http.formLogin(Customizer.withDefaults())
         http.formLogin(form -> form.loginPage("/login").permitAll());

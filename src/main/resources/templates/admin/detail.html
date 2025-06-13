@@ -6,15 +6,13 @@
     <title>Admin - Users</title>
 </head>
 <body>
-    <h2>Admin - Users</h2>
+    <h2>Admin - User</h2>
     <hr>
-    <ul>
-        <li th:each="user:${users}" th:onclick="'location.href=\'/admin/users/'+ @{${user.id}} + '\''">
-            <span th:text="${user.id}"></span> |
-            username : <span th:text="${user.username}"></span> |
-            name : <span th:text="${user.name}"></span>
-        </li>
-    </ul>
+    <b>User Detail Information (UserId: <span th:text="${id}"></span>)</b>
+    <div>- username : <span th:text="${username}"></span></div>
+    <div>- name : <span th:text="${name}"></span></div>
+    <div>- job : <span th:text="${job}"></span></div>
+    <div>- specialty : <span th:text="${specialty}"></span></div>
     <hr>
     <form id="logout" action="/logout" method="POST">
         <button type="submit">Logout</button>

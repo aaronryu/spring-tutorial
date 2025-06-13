@@ -45,12 +45,25 @@ public class PageController {
         return "mypage/index";
     }
 
-    @GetMapping("/admin")
-    public String admin(Model model) {
+    @GetMapping("/admin/users")
+    public String adminUsers(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info(" - Logged User : " + authentication);
         List<UserResponseDto> users = userService.findAll();
         model.addAttribute("users", users);
         return "admin/index";
+    }
+
+    @GetMapping("/admin/users/{id}")
+    public String adminUser(@PathVariable(value = "id") Integer id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info(" - Logged User : " + authentication);
+        UserResponseDto user = userService.findById(id);
+        model.addAttribute("id", user.getId());
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("name", user.getName());
+        model.addAttribute("job", user.getJob());
+        model.addAttribute("specialty", user.getSpecialty());
+        return "admin/detail";
     }
 }
