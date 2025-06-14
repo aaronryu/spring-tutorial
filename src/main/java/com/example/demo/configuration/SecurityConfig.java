@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -25,12 +26,14 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomLogoutSuccessHandler logoutSuccessHandler;
+    private final CorsConfigurationSource reactConfigurationSource;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
         http.httpBasic(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
         http.csrf(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
+        http.cors((cors) -> cors.configurationSource(reactConfigurationSource));
 
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/")).permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/mypage")).authenticated());
