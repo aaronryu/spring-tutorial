@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
         http.httpBasic(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
-        http.csrf(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
+//      http.csrf(AbstractHttpConfigurer::disable/* = (auth) -> auth.disable() */);
         http.cors((cors) -> cors.configurationSource(reactConfigurationSource));
 
         http.authorizeHttpRequests(request -> request.requestMatchers(new AntPathRequestMatcher("/")).permitAll());
