@@ -25,6 +25,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @CrossOrigin
+    /**
+     * - All origins are allowed.
+     * - The HTTP methods allowed are those specified in the @RequestMapping annotation (GET, for this example).
+     * - The time that the preflight response is cached (maxAge) is 30 minutes.
+     */
     @GetMapping("")
     public ResponseEntity<List<UserResponseDto>> users() {
         List<UserResponseDto> users = userService.findAll();
