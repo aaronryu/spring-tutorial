@@ -81,6 +81,7 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .requestMatchers(new AntPathRequestMatcher("/health"))
                 .requestMatchers(new AntPathRequestMatcher("/health/**"))
-                ;
+                .requestMatchers(new AntPathRequestMatcher("/favicon.ico"))
+                .requestMatchers(new AntPathRequestMatcher("/favicon-cowboy.ico"));
     }
 }
