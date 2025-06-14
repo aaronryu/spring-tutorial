@@ -10,7 +10,7 @@
     <hr>
     <div>- username : <span th:text="${username}"></span></div>
     <hr>
-    <form id="logout" action="/logout" method="POST">
+    <form id="logout" th:action="@{/logout}" method="POST">
         <button type="submit">Logout</button>
     </form>
     <br>

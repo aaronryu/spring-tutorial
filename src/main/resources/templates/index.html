@@ -9,7 +9,7 @@
     <h2>Main</h2>
     <hr>
 
-    <form id="logout" action="/logout" method="POST">
+    <form id="logout" th:action="@{/logout}" method="POST">
         <button type="submit">Logout</button>
         <button onclick="location.href='/login'" type="button">Login</button>
     </form>

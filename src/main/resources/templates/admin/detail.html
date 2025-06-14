@@ -14,7 +14,7 @@
     <div>- job : <span th:text="${job}"></span></div>
     <div>- specialty : <span th:text="${specialty}"></span></div>
     <hr>
-    <form id="logout" action="/logout" method="POST">
+    <form id="logout" th:action="@{/logout}" method="POST">
         <button type="submit">Logout</button>
     </form>
     <br>
