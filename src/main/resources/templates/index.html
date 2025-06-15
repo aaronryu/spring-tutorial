@@ -9,7 +9,8 @@
 <body>
     <h2>Main</h2>
     <hr>
-
+<!--<img width="300" src="/images/cat.png" th:src="@{/images/cat.png}"/>-->
+    <img width="300" th:src="@{/images/cat.png}"/>
     <form id="logout" th:action="@{/logout}" method="POST">
         <button type="submit">Logout</button>
         <button onclick="location.href='/login'" type="button">Login</button>
