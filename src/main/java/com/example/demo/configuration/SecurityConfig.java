@@ -1,5 +1,7 @@
 package com.example.demo.configuration;
 
+import com.example.demo.security.JwtAuthenticationFilter;
+import com.example.demo.security.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -23,6 +27,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomLogoutSuccessHandler logoutSuccessHandler;
     private final CorsConfigurationSource reactConfigurationSource;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,6 +46,13 @@ public class SecurityConfig {
 //      http.formLogin(Customizer.withDefaults())
         http.formLogin(form -> form.loginPage("/login").permitAll());
         http.httpBasic(Customizer.withDefaults());
+        http.addFilterAfter(
+                /* Filter */ new JwtAuthenticationFilter(authenticationManager(http)),
+                /* Target */ UsernamePasswordAuthenticationFilter.class
+        );
+        http.sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
 
         http.logout(logout -> logout
                 .logoutUrl("/logout")
@@ -62,10 +74,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.authenticationProvider(authenticationProvider);
+        authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
         return authenticationManagerBuilder.build();
     }
 
