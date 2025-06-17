@@ -1,6 +1,9 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -9,17 +12,17 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    private final String KEY_ROLES = "roles";
+    public static final String AUTHORITIES_KEY = "roles";
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -29,13 +32,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private Collection<? extends GrantedAuthority> createGrantedAuthorities(Claims claims) {
-        List<String> roles = (List) claims.get(KEY_ROLES);
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (String role : roles) {
-            grantedAuthorities.add(() -> role);
-        }
-        return grantedAuthorities;
+    private Collection<? extends GrantedAuthority> getAuthoritiesFromToken(Claims claims) {
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
+        return authorities;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             // IllegalArgumentException – if the specified string is null or empty or only whitespace.
             throw new JwtInvalidException("using illegal argument like null", illegalArgumentException);
         }
-        return new JwtAuthenticationToken(claims.getSubject(), "", createGrantedAuthorities(claims));
+        return new JwtAuthenticationToken(claims.getSubject(), null, getAuthoritiesFromToken(claims));
     }
 
     @Override
