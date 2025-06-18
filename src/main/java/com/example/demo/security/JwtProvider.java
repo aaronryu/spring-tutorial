@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 @Component
 public class JwtProvider implements InitializingBean {
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer ";
+
     @Value("${jwt.secret}")
     private String secret;
 

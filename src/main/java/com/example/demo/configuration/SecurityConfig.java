@@ -2,6 +2,8 @@ package com.example.demo.configuration;
 
 import com.example.demo.security.JwtAuthenticationFilter;
 import com.example.demo.security.JwtAuthenticationProvider;
+import com.example.demo.security.JwtAuthorizationFilter;
+import com.example.demo.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +30,7 @@ public class SecurityConfig {
     private final CustomLogoutSuccessHandler logoutSuccessHandler;
     private final CorsConfigurationSource reactConfigurationSource;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final JwtProvider jwtProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,8 +50,12 @@ public class SecurityConfig {
 //      http.formLogin(Customizer.withDefaults())
         http.formLogin(form -> form.loginPage("/login").permitAll());
         http.httpBasic(Customizer.withDefaults());
-        http.addFilterAfter(
+        http.addFilterBefore(
                 /* Filter */ new JwtAuthenticationFilter(authenticationManager(http)),
+                /* Target */ JwtAuthorizationFilter.class
+        );
+        http.addFilterBefore(
+                /* Filter */ new JwtAuthorizationFilter(authenticationManager(http), jwtProvider),
                 /* Target */ UsernamePasswordAuthenticationFilter.class
         );
         http.sessionManagement(session -> session
