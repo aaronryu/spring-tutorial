@@ -2,26 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
-import com.example.demo.repository.Message;
-import com.example.demo.repository.MessageJdbcApiRepository;
-import com.example.demo.repository.User;
-import com.example.demo.repository.UserJdbcApiRepository;
+import com.example.demo.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.datasource.ConnectionHolder;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -31,26 +18,19 @@ import java.util.List;
 public class UserService {
     private final DataSource dataSource;
     private final TransactionTemplate transactionTemplate;
-    private final UserJdbcApiRepository userJdbcApiRepository;
-    private final MessageJdbcApiRepository messageJdbcApiRepository;
+    private final UserJdbcTemplateRepository userJdbcTemplateRepository;
+    private final MessageJdbcTemplateRepository messageJdbcTemplateRepository;
 
-    public UserResponseDto findById(Integer id) throws SQLException {
-        User retrievedUser = userJdbcApiRepository.findById(id);
-        List<Message> retrievedMessages = messageJdbcApiRepository.findByUserId(id);
+    public UserResponseDto findById(Integer id) {
+        User retrievedUser = userJdbcTemplateRepository.findById(id);
+        List<Message> retrievedMessages = messageJdbcTemplateRepository.findByUserId(id);
         return UserResponseDto.from(retrievedUser, retrievedMessages);
     }
 
-    @Transactional(
-//          propagation   = Propagation.REQUIRED,      // Propagation 전파
-//          isolation     = Isolation.REPEATABLE_READ, // Isolation Level 격리성 레벨
-//          timeout       = -1,                        // Timeout 트랜잭션 타임아웃
-//          readOnly      = false,                     // ReadOnly R 만 허용, CUD 방지
-//          rollbackFor   = Exception.class,
-//          noRollbackFor = RuntimeException.class
-    )
+    @Transactional
     public UserResponseDto create(UserCreateRequestDto request) {
-        User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-        Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
+        User createdUser = userJdbcTemplateRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        Message createdMessages = messageJdbcTemplateRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
         return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
     }
 }
