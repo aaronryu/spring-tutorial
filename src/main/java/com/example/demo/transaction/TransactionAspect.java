@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
@@ -15,9 +16,14 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 public class TransactionAspect {
     private final PlatformTransactionManager platformTransactionManager;
 
-    @Around("@annotation(CustomTransaction)")
-    public Object transaction(ProceedingJoinPoint joinPoint) throws Throwable {
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
+    @Around("@annotation(annotation)")
+    public Object transaction(ProceedingJoinPoint joinPoint, CustomTransaction annotation) throws Throwable {
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(annotation.propagation().value());
+        transactionDefinition.setIsolationLevel(annotation.isolation().value());
+        transactionDefinition.setTimeout(annotation.timeout());
+        transactionDefinition.setReadOnly(annotation.readOnly());
+        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(transactionDefinition);
         try {
             Object result = joinPoint.proceed();
             platformTransactionManager.commit(transactionStatus);
