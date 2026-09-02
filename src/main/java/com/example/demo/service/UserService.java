@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final DataSource dataSource;
-//  private final PlatformTransactionManager platformTransactionManager;
+    private final PlatformTransactionManager platformTransactionManager;
     private final UserJdbcApiRepository userJdbcApiRepository;
     private final MessageJdbcApiRepository messageJdbcApiRepository;
 
@@ -36,7 +36,6 @@ public class UserService {
     }
 
     public UserResponseDto create(UserCreateRequestDto request) throws SQLException {
-        PlatformTransactionManager platformTransactionManager = new DataSourceTransactionManager(dataSource);
         TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
