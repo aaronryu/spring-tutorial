@@ -46,13 +46,13 @@ public class UserJdbcApiRepository {
         }
     }
 
-    public User create(String name, Integer age, String job, String specialty) throws SQLException {
-        Connection connection = null;
+    public User create(final Connection connection, String name, Integer age, String job, String specialty) throws SQLException {
+//      Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             // INSERT 유저 정보
-            connection = dataSource.getConnection();
+//          connection = dataSource.getConnection();
             statement = connection.prepareStatement("INSERT INTO \"user\" (name, age, job, specialty, created_at) VALUES (?, ?, ?, ?, ?);");
             statement.setString(1, name);
             statement.setInt(2, age);
@@ -90,7 +90,7 @@ public class UserJdbcApiRepository {
         } finally {
             if (null != resultSet) resultSet.close();
             if (null != statement) statement.close();
-            if (null != connection) connection.close();
+//          if (null != connection) connection.close();
         }
     }
 }
