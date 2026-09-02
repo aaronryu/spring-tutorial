@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
 import com.example.demo.repository.*;
+import com.example.demo.transaction.CustomTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class UserService {
         return UserResponseDto.from(retrievedUser, retrievedMessages);
     }
 
-    @Transactional
+    @CustomTransaction
     public UserResponseDto create(UserCreateRequestDto request) {
         User createdUser = userJdbcTemplateRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
         Message createdMessages = messageJdbcTemplateRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
