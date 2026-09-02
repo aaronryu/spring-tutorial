@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -37,16 +40,17 @@ public class UserService {
         return UserResponseDto.from(retrievedUser, retrievedMessages);
     }
 
+    @Transactional(
+//          propagation   = Propagation.REQUIRED,      // Propagation 전파
+//          isolation     = Isolation.REPEATABLE_READ, // Isolation Level 격리성 레벨
+//          timeout       = -1,                        // Timeout 트랜잭션 타임아웃
+//          readOnly      = false,                     // ReadOnly R 만 허용, CUD 방지
+//          rollbackFor   = Exception.class,
+//          noRollbackFor = RuntimeException.class
+    )
     public UserResponseDto create(UserCreateRequestDto request) {
-//      transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-//      transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-//      transactionTemplate.setTimeout(-1);
-//      transactionTemplate.setReadOnly(false);
-        UserResponseDto response = transactionTemplate.execute((status) -> {
-            User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-            Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
-            return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
-        });
-        return response;
+        User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
+        Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
+        return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
     }
 }
