@@ -47,7 +47,7 @@ public class UserJdbcApiRepository {
         }
     }
 
-    public User create(String name, Integer age, String job, String specialty) throws SQLException {
+    public User create(String name, Integer age, String job, String specialty) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -89,9 +89,13 @@ public class UserJdbcApiRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (null != resultSet) resultSet.close();
-            if (null != statement) statement.close();
-//          if (null != connection) connection.close();
+            try {
+                if (null != resultSet) resultSet.close();
+                if (null != statement) statement.close();
+//              if (null != connection) connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

@@ -47,7 +47,7 @@ public class MessageJdbcApiRepository {
         }
     }
 
-    public Message create(Integer userId, String message) throws SQLException {
+    public Message create(Integer userId, String message) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -86,9 +86,13 @@ public class MessageJdbcApiRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (null != resultSet) resultSet.close();
-            if (null != statement) statement.close();
-//          if (null != connection) connection.close();
+            try {
+                if (null != resultSet) resultSet.close();
+                if (null != statement) statement.close();
+//              if (null != connection) connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

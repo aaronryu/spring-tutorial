@@ -11,9 +11,11 @@ import org.springframework.jdbc.datasource.ConnectionHolder;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -25,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final DataSource dataSource;
-    private final PlatformTransactionManager platformTransactionManager;
+    private final TransactionTemplate transactionTemplate;
     private final UserJdbcApiRepository userJdbcApiRepository;
     private final MessageJdbcApiRepository messageJdbcApiRepository;
 
@@ -35,17 +37,16 @@ public class UserService {
         return UserResponseDto.from(retrievedUser, retrievedMessages);
     }
 
-    public UserResponseDto create(UserCreateRequestDto request) throws SQLException {
-        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
+    public UserResponseDto create(UserCreateRequestDto request) {
+//      transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+//      transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+//      transactionTemplate.setTimeout(-1);
+//      transactionTemplate.setReadOnly(false);
+        UserResponseDto response = transactionTemplate.execute((status) -> {
             User createdUser = userJdbcApiRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
             Message createdMessages = messageJdbcApiRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
-            UserResponseDto response = UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
-            platformTransactionManager.commit(transactionStatus); // * 자동 커밋이 꺼져있기때문에(OFF) 임시 저장소에 쌓여있는 그동안의 쿼리 결과들을 수동 커밋 COMMIT 통해 단 한방에 데이터베이스에 그 모든것들을 최종 반영해야한다
-            return response;
-        } catch (Exception e) {
-            platformTransactionManager.rollback(transactionStatus); // * 자동 커밋이 꺼져있기때문에(OFF) 임시 저장소에 쌓여있는 그동안의 쿼리 결과들을 ROLLBACK 통해 단 한방에 날려버릴 수 있다
-            throw e;
-        }
+            return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
+        });
+        return response;
     }
 }
