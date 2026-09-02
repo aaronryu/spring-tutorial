@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.dto.UserCreateRequestDto;
 import com.example.demo.controller.dto.UserResponseDto;
 import com.example.demo.service.UserService;
 import lombok.NonNull;
@@ -19,5 +20,11 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public UserResponseDto retrieve(@PathVariable @NonNull Integer id) throws SQLException {
         return userService.findById(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(method = RequestMethod.POST, value = "")
+    public UserResponseDto create(@RequestBody UserCreateRequestDto request) throws SQLException {
+        return userService.create(request);
     }
 }
