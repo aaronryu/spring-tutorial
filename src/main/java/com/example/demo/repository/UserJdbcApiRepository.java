@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -19,7 +20,7 @@ public class UserJdbcApiRepository {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource); // 트랜잭션 동기화 : 읽기(R)
             statement = connection.prepareStatement("SELECT * FROM \"user\" WHERE id = ?");
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
@@ -46,13 +47,13 @@ public class UserJdbcApiRepository {
         }
     }
 
-    public User create(final Connection connection, String name, Integer age, String job, String specialty) throws SQLException {
-//      Connection connection = null;
+    public User create(String name, Integer age, String job, String specialty) throws SQLException {
+        Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             // INSERT 유저 정보
-//          connection = dataSource.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource); // 트랜잭션 동기화 : 읽기(R)
             statement = connection.prepareStatement("INSERT INTO \"user\" (name, age, job, specialty, created_at) VALUES (?, ?, ?, ?, ?);");
             statement.setString(1, name);
             statement.setInt(2, age);

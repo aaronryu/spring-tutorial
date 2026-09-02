@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -21,7 +22,7 @@ public class MessageJdbcApiRepository {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = dataSource.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource); // 트랜잭션 동기화 : 읽기(R)
             statement = connection.prepareStatement("SELECT * FROM message WHERE user_id = ?");
             statement.setInt(1, userId);
             List<Message> results = new ArrayList<>();
@@ -46,13 +47,13 @@ public class MessageJdbcApiRepository {
         }
     }
 
-    public Message create(final Connection connection, Integer userId, String message) throws SQLException {
-//      Connection connection = null;
+    public Message create(Integer userId, String message) throws SQLException {
+        Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             // INSERT 유저 정보
-//          connection = dataSource.getConnection();
+            connection = DataSourceUtils.getConnection(dataSource); // 트랜잭션 동기화 : 읽기(R)
             if (userId > 2) throw new RuntimeException("같은 하나의 트랜잭션 내 예외 발생 시 ROLLBACK 되는지 확인하기 위해 일부러 유저 ID 3부터는 메세지 저장을 시도할 시 에러를 발생시킵니다");
             statement = connection.prepareStatement("INSERT INTO message (message, user_id, created_at) VALUES (?, ?, ?);");
             statement.setString(1, message);
