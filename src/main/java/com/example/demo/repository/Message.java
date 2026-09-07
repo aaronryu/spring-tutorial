@@ -28,4 +28,8 @@ public class Message {
     private String message;
     private Integer userId;
     private LocalDateTime createdAt;
+
+    public static Message creating(String message, Integer userId) {
+        return new Message(null, message, userId, LocalDateTime.now());
+    }
 }

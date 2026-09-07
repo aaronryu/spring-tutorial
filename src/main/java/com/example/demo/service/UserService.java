@@ -19,19 +19,19 @@ import java.util.List;
 public class UserService {
     private final DataSource dataSource;
     private final TransactionTemplate transactionTemplate;
-    private final UserJdbcTemplateRepository userJdbcTemplateRepository;
-    private final MessageJdbcTemplateRepository messageJdbcTemplateRepository;
+    private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
 
     public UserResponseDto findById(Integer id) {
-        User retrievedUser = userJdbcTemplateRepository.findById(id);
-        List<Message> retrievedMessages = messageJdbcTemplateRepository.findByUserId(id);
+        User retrievedUser = userRepository.findById(id).orElseThrow();
+        List<Message> retrievedMessages = messageRepository.findByUserId(id).orElseThrow();
         return UserResponseDto.from(retrievedUser, retrievedMessages);
     }
 
     @CustomTransaction
     public UserResponseDto create(UserCreateRequestDto request) {
-        User createdUser = userJdbcTemplateRepository.create(request.getName(), request.getAge(), request.getJob(), request.getSpecialty());
-        Message createdMessages = messageJdbcTemplateRepository.create(createdUser.getId(), createdUser.getName() + "님 회원가입 감사드립니다!");
+        User createdUser = userRepository.save(request.toCreating());
+        Message createdMessages = messageRepository.save(Message.creating(createdUser.getName() + "님 회원가입 감사드립니다!", createdUser.getId()));
         return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
     }
 }
