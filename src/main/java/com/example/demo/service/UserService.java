@@ -28,6 +28,13 @@ public class UserService {
         return UserResponseDto.from(retrievedUser, retrievedUser.getMessages());
     }
 
+    public List<UserResponseDto> findAll() {
+        List<User> retrievedUsers = userRepository.findAll();
+        return retrievedUsers.stream()
+                .map((each) -> UserResponseDto.from(each, each.getMessages()))
+                .toList();
+    }
+
     @CustomTransaction
     public UserResponseDto create(UserCreateRequestDto request) {
         User createdUser = userRepository.save(request.toCreating());
