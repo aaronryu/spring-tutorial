@@ -24,8 +24,8 @@ public class UserService {
 
     public UserResponseDto findById(Integer id) {
         User retrievedUser = userRepository.findById(id).orElseThrow();
-        List<Message> retrievedMessages = messageRepository.findByUserId(id).orElseThrow();
-        return UserResponseDto.from(retrievedUser, retrievedMessages);
+//      List<Message> retrievedMessages = messageRepository.findByUserId(id).orElseThrow();
+        return UserResponseDto.from(retrievedUser, retrievedUser.getMessages());
     }
 
     @CustomTransaction

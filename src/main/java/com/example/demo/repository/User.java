@@ -1,15 +1,13 @@
 package com.example.demo.repository;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity
@@ -31,4 +29,7 @@ public class User {
     private String job;
     private String specialty;
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Message> messages;
 }
