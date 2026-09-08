@@ -31,7 +31,7 @@ public class UserService {
     public List<UserResponseDto> findAll() {
         List<User> retrievedUsers = userRepository.findAll();
         return retrievedUsers.stream()
-                .map((each) -> UserResponseDto.from(each, each.getMessages()))
+                .map(UserResponseDto::from)
                 .toList();
     }
 
