@@ -23,6 +23,12 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public void delete(@PathVariable @NonNull Integer id) throws SQLException {
+        userService.delete(id);
+    }
+
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(method = RequestMethod.GET, value = "")
     public List<UserResponseDto> retrieve() throws SQLException {

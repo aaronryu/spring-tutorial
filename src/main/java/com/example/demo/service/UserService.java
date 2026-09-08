@@ -43,4 +43,11 @@ public class UserService {
 //      Message createdMessages = messageRepository.save(Message.creating(createdUser.getName() + "님 회원가입 감사드립니다!", createdUser));
         return UserResponseDto.from(createdUser);
     }
+
+    @Transactional
+    public void delete(Integer id) {
+//      User retrievedUser = userRepository.findById(id).orElseThrow();
+//      userRepository.delete(retrievedUser);
+        userRepository.deleteById(id);
+    }
 }
