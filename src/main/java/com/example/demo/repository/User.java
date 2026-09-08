@@ -30,6 +30,6 @@ public class User {
     private String specialty;
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Message> messages;
 }
