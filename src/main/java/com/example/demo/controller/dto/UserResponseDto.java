@@ -1,6 +1,5 @@
 package com.example.demo.controller.dto;
 
-import com.example.demo.repository.Message;
 import com.example.demo.repository.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class UserResponseDto {
     private final LocalDateTime createdAt;
     private final List<MessageResponseDto> messages;
 
-    public static UserResponseDto from(User user, List<Message> messages) {
+    public static UserResponseDto from(User user) {
         return new UserResponseDto(
             user.getId(),
                 user.getName(),
@@ -27,7 +26,7 @@ public class UserResponseDto {
                 user.getJob(),
                 user.getSpecialty(),
                 user.getCreatedAt(),
-                messages.stream()
+                user.getMessages().stream()
                         .map(MessageResponseDto::from)
                         .toList()
         );

@@ -25,7 +25,7 @@ public class UserService {
     public UserResponseDto findById(Integer id) {
         User retrievedUser = userRepository.findById(id).orElseThrow();
 //      List<Message> retrievedMessages = messageRepository.findByUserId(id).orElseThrow();
-        return UserResponseDto.from(retrievedUser, retrievedUser.getMessages());
+        return UserResponseDto.from(retrievedUser);
     }
 
     public List<UserResponseDto> findAll() {
@@ -37,8 +37,10 @@ public class UserService {
 
     @CustomTransaction
     public UserResponseDto create(UserCreateRequestDto request) {
-        User createdUser = userRepository.save(request.toCreating());
-        Message createdMessages = messageRepository.save(Message.creating(createdUser.getName() + "님 회원가입 감사드립니다!", createdUser));
-        return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
+        User creatingUser = request.toCreating();
+        creatingUser.setWelcomeMessages();
+        User createdUser = userRepository.save(creatingUser);
+//      Message createdMessages = messageRepository.save(Message.creating(createdUser.getName() + "님 회원가입 감사드립니다!", createdUser));
+        return UserResponseDto.from(createdUser);
     }
 }

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -34,4 +36,11 @@ public class User {
     @BatchSize(size = 2)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Message> messages;
+
+    public void setWelcomeMessages() {
+        this.messages.addAll(Arrays.asList(
+                Message.creating("회원가입 축하", this),
+                Message.creating("가입 축하쿠폰", this)
+        ));
+    }
 }
