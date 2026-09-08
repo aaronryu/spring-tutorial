@@ -31,7 +31,7 @@ public class User {
     private String specialty;
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Message> messages;
 
     public void setWelcomeMessages() {
