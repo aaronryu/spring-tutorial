@@ -31,7 +31,7 @@ public class UserService {
     @CustomTransaction
     public UserResponseDto create(UserCreateRequestDto request) {
         User createdUser = userRepository.save(request.toCreating());
-        Message createdMessages = messageRepository.save(Message.creating(createdUser.getName() + "님 회원가입 감사드립니다!", createdUser.getId()));
+        Message createdMessages = messageRepository.save(Message.creating(createdUser.getName() + "님 회원가입 감사드립니다!", createdUser));
         return UserResponseDto.from(createdUser, Collections.singletonList(createdMessages));
     }
 }

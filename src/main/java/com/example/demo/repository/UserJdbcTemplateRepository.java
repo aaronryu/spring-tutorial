@@ -15,12 +15,12 @@ import java.time.ZoneId;
 public class UserJdbcTemplateRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public User findById(Integer id) {
+    public UserJdbc findById(Integer id) {
         int parameter = id;
-        User retrieved = jdbcTemplate.queryForObject(
+        UserJdbc retrieved = jdbcTemplate.queryForObject(
                 "SELECT * FROM \"user\" WHERE id = ?",
                 (resultSet, rowNum) -> {
-                    return new User(
+                    return new UserJdbc(
                             resultSet.getInt("id"),
                             resultSet.getString("name"),
                             resultSet.getInt("age"),
@@ -37,7 +37,7 @@ public class UserJdbcTemplateRepository {
         return retrieved;
     }
 
-    public User create(String name, Integer age, String job, String specialty) {
+    public UserJdbc create(String name, Integer age, String job, String specialty) {
         Object[] paramters = new Object[] {
                 name,
                 age,
@@ -54,10 +54,10 @@ public class UserJdbcTemplateRepository {
                 Integer.class
         );
         Integer parameter = createdUserId;
-        User created = jdbcTemplate.queryForObject(
+        UserJdbc created = jdbcTemplate.queryForObject(
                 "SELECT * FROM \"user\" WHERE id = ?;",
                 (resultSet, rowNum) -> {
-                    return new User(
+                    return new UserJdbc(
                             resultSet.getInt("id"),
                             resultSet.getString("name"),
                             resultSet.getInt("age"),

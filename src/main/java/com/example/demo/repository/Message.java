@@ -1,9 +1,6 @@
 package com.example.demo.repository;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,10 +23,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String message;
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+//  private Integer userId;
     private LocalDateTime createdAt;
 
-    public static Message creating(String message, Integer userId) {
-        return new Message(null, message, userId, LocalDateTime.now());
+    public static Message creating(String message, User user) {
+        return new Message(null, message, user, LocalDateTime.now());
     }
 }

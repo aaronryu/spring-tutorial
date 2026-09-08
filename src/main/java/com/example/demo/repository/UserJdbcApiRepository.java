@@ -15,7 +15,7 @@ import java.time.ZoneId;
 public class UserJdbcApiRepository {
     private final DataSource dataSource;
 
-    public User findById(Integer id) throws SQLException {
+    public UserJdbc findById(Integer id) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -25,7 +25,7 @@ public class UserJdbcApiRepository {
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return new User(
+                return new UserJdbc(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("age"),
@@ -47,7 +47,7 @@ public class UserJdbcApiRepository {
         }
     }
 
-    public User create(String name, Integer age, String job, String specialty) {
+    public UserJdbc create(String name, Integer age, String job, String specialty) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -73,7 +73,7 @@ public class UserJdbcApiRepository {
             statement.setInt(1, createdUserId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return new User(
+                return new UserJdbc(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("age"),

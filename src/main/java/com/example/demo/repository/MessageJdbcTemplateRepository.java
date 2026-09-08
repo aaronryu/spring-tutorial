@@ -18,12 +18,12 @@ import java.util.List;
 public class MessageJdbcTemplateRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public List<Message> findByUserId(Integer userId) {
+    public List<MessageJdbc> findByUserId(Integer userId) {
         Integer parameter = userId;
-        List<Message> messages = jdbcTemplate.queryForStream(
+        List<MessageJdbc> messages = jdbcTemplate.queryForStream(
                 "SELECT * FROM message WHERE user_id = ?",
                 (resultSet, rowNum) -> {
-                    return new Message(
+                    return new MessageJdbc(
                             resultSet.getInt("id"),
                             resultSet.getString("message"),
                             resultSet.getInt("user_id"),
@@ -38,7 +38,7 @@ public class MessageJdbcTemplateRepository {
         return messages;
     }
 
-    public Message create(Integer userId, String message) {
+    public MessageJdbc create(Integer userId, String message) {
         if (userId > 2) throw new RuntimeException("같은 하나의 트랜잭션 내 예외 발생 시 ROLLBACK 되는지 확인하기 위해 일부러 유저 ID 3부터는 메세지 저장을 시도할 시 에러를 발생시킵니다");
         Object[] parameters = new Object[] {
                 message,
@@ -54,10 +54,10 @@ public class MessageJdbcTemplateRepository {
                 Integer.class
         );
         Integer parameter = createdMessageId;
-        Message created = jdbcTemplate.queryForObject(
+        MessageJdbc created = jdbcTemplate.queryForObject(
                 "SELECT * FROM message WHERE id = ?;",
                 (resultSet, rowNum) -> {
-                    return new Message(
+                    return new MessageJdbc(
                             resultSet.getInt("id"),
                             resultSet.getString("message"),
                             resultSet.getInt("user_id"),

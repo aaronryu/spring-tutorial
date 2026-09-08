@@ -17,7 +17,7 @@ import java.util.List;
 public class MessageJdbcApiRepository {
     private final DataSource dataSource;
 
-    public List<Message> findByUserId(Integer userId) throws SQLException {
+    public List<MessageJdbc> findByUserId(Integer userId) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -25,10 +25,10 @@ public class MessageJdbcApiRepository {
             connection = DataSourceUtils.getConnection(dataSource); // 트랜잭션 동기화 : 읽기(R)
             statement = connection.prepareStatement("SELECT * FROM message WHERE user_id = ?");
             statement.setInt(1, userId);
-            List<Message> results = new ArrayList<>();
+            List<MessageJdbc> results = new ArrayList<>();
             while (resultSet.next()) {
                 results.add(
-                        new Message(
+                        new MessageJdbc(
                                 resultSet.getInt("id"),
                                 resultSet.getString("message"),
                                 resultSet.getInt("user_id"),
@@ -47,7 +47,7 @@ public class MessageJdbcApiRepository {
         }
     }
 
-    public Message create(Integer userId, String message) {
+    public MessageJdbc create(Integer userId, String message) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -72,7 +72,7 @@ public class MessageJdbcApiRepository {
             statement.setInt(1, createdMessageId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return new Message(
+                return new MessageJdbc(
                         resultSet.getInt("id"),
                         resultSet.getString("message"),
                         resultSet.getInt("user_id"),
