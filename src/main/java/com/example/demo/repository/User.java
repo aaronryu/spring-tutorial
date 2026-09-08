@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +31,7 @@ public class User {
     private String specialty;
     private LocalDateTime createdAt;
 
+    @BatchSize(size = 2)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Message> messages;
 }
