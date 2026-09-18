@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import java.sql.SQLException;
+
 public class DemoApplication {
 
     // 1개 계정밖에 허용되지 않는 데이터베이스 - username: "admin" + password: "1234"
@@ -7,7 +9,7 @@ public class DemoApplication {
         if (username.equals("admin") && password.equals("1234")) {
             System.out.println("- 데이터베이스 접속 성공");
         } else {
-            throw new RuntimeException("데이터베이스 접속 실패 - 사유 : ID / PW 일치하지 않음");
+            throw new SQLException("데이터베이스 접속 실패 - 사유 : ID / PW 일치하지 않음");
         }
     }
 
