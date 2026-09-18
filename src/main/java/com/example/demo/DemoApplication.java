@@ -6,10 +6,14 @@ public class DemoApplication {
 
     // 1개 계정밖에 허용되지 않는 데이터베이스 - username: "admin" + password: "1234"
     public static void connect(String username, String password) {
-        if (username.equals("admin") && password.equals("1234")) {
-            System.out.println("- 데이터베이스 접속 성공");
-        } else {
-            throw new SQLException("데이터베이스 접속 실패 - 사유 : ID / PW 일치하지 않음");
+        try {
+            if (username.equals("admin") && password.equals("1234")) {
+                System.out.println("- 데이터베이스 접속 성공");
+            } else {
+                throw new SQLException("데이터베이스 접속 실패 - 사유 : ID / PW 일치하지 않음");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
