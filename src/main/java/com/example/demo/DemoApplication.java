@@ -13,9 +13,13 @@ public class DemoApplication {
         }
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         System.out.println(" - 프로그램이 시작되었습니다");
-        connect("aaron", "7890");
+        try {
+            connect("aaron", "7890");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println(" - 프로그램이 중간에 멈추지 않고, 정상적으로 종료되었습니다 = exit code 0");
     }
 }
