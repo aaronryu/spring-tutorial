@@ -18,13 +18,13 @@ public class LoggingController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET, value = "")
     public void logging(HttpServletRequest request) {
-        String requestIp = request.getRemoteAddr();
-        MDC.put("requested", requestIp);
-        log.trace("1: TRACE 로그"); // log.trace("1: TRACE 로그 - {}", requestIp);
-        log.debug("2: DEBUG 로그"); // log.debug("2: DEBUG 로그 - {}", requestIp);
-        log.info ("3: INFO  로그"); // log.info ("3: INFO  로그 - {}", requestIp);
-        log.warn ("4: WARN  로그"); // log.warn ("4: WARN  로그 - {}", requestIp);
-        log.error("5: ERROR 로그"); // log.error("5: ERROR 로그 - {}", requestIp);
-        MDC.clear();
+        try (MDC.MDCCloseable c1 = MDC.putCloseable("requestedIp", request.getRemoteAddr());
+             MDC.MDCCloseable c2 = MDC.putCloseable("requestedUserId", "aaron")) {
+            log.trace("1: TRACE 로그"); // log.trace("1: TRACE 로그 - {}", requestIp);
+            log.debug("2: DEBUG 로그"); // log.debug("2: DEBUG 로그 - {}", requestIp);
+            log.info ("3: INFO  로그"); // log.info ("3: INFO  로그 - {}", requestIp);
+            log.warn ("4: WARN  로그"); // log.warn ("4: WARN  로그 - {}", requestIp);
+            log.error("5: ERROR 로그"); // log.error("5: ERROR 로그 - {}", requestIp);
+        }
     }
 }
