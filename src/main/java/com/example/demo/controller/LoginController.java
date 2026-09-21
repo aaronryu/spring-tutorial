@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.controller.dto.LoginResponseDto;
-import com.example.demo.exception.CustomException;
-import com.example.demo.exception.ErrorType;
 import com.example.demo.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,23 +22,9 @@ public class LoginController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, value = "/login")
     public ResponseEntity<LoginResponseDto> connect(@RequestParam String username, @RequestParam String password) {
-        try {
-            loginService.connect(username, password);
-            return ResponseEntity
-                    .status(HttpStatus.ACCEPTED)
-                    .body(LoginResponseDto.success(username));
-        } catch (CustomException e) {
-            ErrorType type = e.getType();
-            log.makeLoggingEventBuilder(type.getLevel())
-                    .log(e.getMessage(), e);
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(LoginResponseDto.failed(type));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(LoginResponseDto.failed(e.getMessage()));
-        }
+        loginService.connect(username, password);
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(LoginResponseDto.success(username));
     }
 }
