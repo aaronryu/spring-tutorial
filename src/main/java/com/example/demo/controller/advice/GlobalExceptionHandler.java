@@ -9,28 +9,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<LoginResponseDto> handle(CustomException exception) {
+    public LoginResponseDto handle(CustomException exception) {
         ErrorType type = exception.getType();
         log.makeLoggingEventBuilder(type.getLevel())
                 .log(exception.getMessage(), exception);
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(LoginResponseDto.failed(type));
+        return LoginResponseDto.failed(type);
     }
 
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<LoginResponseDto> handle(Exception exception) {
+    public LoginResponseDto handle(Exception exception) {
         log.error(exception.getMessage(), exception);
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(LoginResponseDto.failed(exception.getMessage()));
+        return LoginResponseDto.failed(exception.getMessage());
     }
 }
