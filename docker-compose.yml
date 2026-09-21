@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # 1. Spring Boot + Logback (로그 파일 내 적재)
+  spring-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # 호스트의 SPRING_PROFILES_ACTIVE 값을 읽어서 설정 (기본값: prod)
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-prod}
+    volumes:
+# = 스프링 컨테이너에서 /app/logs 내 적재하면 자동으로 호스트 내 log-data 볼륨 영역 내 자동 적재된다
+#   HOST VOLUME <- CONTAINER
+      - log-data:/app/logs # Spring 이 로그 파일 적재
+
+  # 2. Logstash (로그 수집기)
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    volumes:
+#   HOST VOLUME -> CONTAINER
+# = 스프링 컨테이너가 호스트 내 log-data 볼륨 영역 내 로그 파일을 적으면 Logstash 컨테이너가 자동으로 긁어서 수집
+      - log-data:/var/log/app # Spring 과 동일한 볼륨 공유 (Spring-App -> Logstash)
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+#          HOST VOLUME -> CONTAINER
+# 현재 docker-compose.yml 파일이 존재하는 동일 호스트 디렉토리 내 ./logstash.conf 설정파일 찾아서 컨테이너 내부로 가져오기
+    depends_on:
+      - elasticsearch
+
+  # 3. Elasticsearch (로그 저장/검색 엔진)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false # 실습을 위해 보안/인증 비활성화
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # 메모리 제한
+    ports:
+      - "9200:9200"
+
+  # 4. Kibana (로그 대시보드 시각화)
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+
+volumes:
+  log-data: # 두 컨테이너가 함께 사용할 Shared Docker Volume
