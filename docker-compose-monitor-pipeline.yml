@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  # 1. Spring Boot (Spring Actuator + Micrometer) 모니터링
+  spring-app:
+    build: .
+    ports:
+      - "8080:8080" # 메인 서비스 포트
+      - "7070:7070" # Actuator 및 Prometheus 메트릭 수집 포트
+
+  # 2. Prometheus (메트릭 수집 및 TSDB 저장)
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # 3. Grafana (시각화 대시보드)
+  grafana:
+    image: grafana/grafana:10.2.0
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus

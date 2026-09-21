@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s # 실습을 위해 5초마다 긁어오도록 설정
+
+scrape_configs:
+  - job_name: "spring-boot-app"
+    metrics_path: "/actuator/prometheus" # 메트릭이 노출된 경로
+    static_configs:
+      - targets: ["spring-app:7070"] # docker-compose 내의 spring 컨테이너 서비스명
