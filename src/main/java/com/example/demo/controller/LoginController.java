@@ -21,7 +21,7 @@ public class LoginController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = "!application/json")
 //  public LoginResponseDto connect(@RequestParam @Size(min = 4) String username, @RequestParam @Size(min = 4) String password) {
-    public LoginResponseDto connect(@RequestParam String username, @RequestParam String password) {
+    public LoginResponseDto<Void> connect(@RequestParam String username, @RequestParam String password) {
         loginService.connect(username, password);
         return LoginResponseDto.success(username);
     }
@@ -30,7 +30,7 @@ public class LoginController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 //  public LoginResponseDto connect(@RequestBody @Valid LoginRequestDto request) {
-    public LoginResponseDto connect(@RequestBody LoginRequestDto request) {
+    public LoginResponseDto<Void> connect(@RequestBody LoginRequestDto request) {
         loginService.connect(request);
         return LoginResponseDto.success(request.getUsername());
     }
