@@ -15,13 +15,13 @@ public class LoginService {
             throw new RuntimeException("예상치 못한 갑작스러운 예외/오류 발생");
         }
         if (!StringUtils.hasLength(username)) {
-            throw new UserException(ErrorType.USERNAME_NOT_EXIST);
+            throw new CustomException(ErrorType.User.USERNAME_NOT_EXIST);
         }
         if (!StringUtils.hasLength(password)) {
-            throw new UserException(ErrorType.PASSWORD_NOT_EXIST);
+            throw new CustomException(ErrorType.User.PASSWORD_NOT_EXIST);
         }
         if (!username.equals("admin") || !password.equals("1234")) {
-            throw new UserException(ErrorType.AUTHENTICATION_FAILED);
+            throw new CustomException(ErrorType.User.AUTHENTICATION_FAILED);
         }
         System.out.println("- 데이터베이스 접속 성공");
     }
