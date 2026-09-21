@@ -1,8 +1,7 @@
 package com.example.demo;
 
-import com.example.demo.exception.DatabaseException;
-import com.example.demo.exception.PasswordException;
-import com.example.demo.exception.UsernameException;
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.ErrorType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -14,13 +13,13 @@ public class DemoApplication {
     // 1개 계정밖에 허용되지 않는 데이터베이스 - username: "admin" + password: "1234"
     public static void connect(String username, String password) {
         if (!StringUtils.hasLength(username)) {
-            throw new UsernameException();
+            throw new CustomException(ErrorType.USERNAME_NOT_EXIST);
         }
         if (!StringUtils.hasLength(password)) {
-            throw new PasswordException();
+            throw new CustomException(ErrorType.PASSWORD_NOT_EXIST);
         }
         if (!username.equals("admin") || !password.equals("1234")) {
-            throw new DatabaseException("ID / PW 일치하지 않음");
+            throw new CustomException(ErrorType.AUTHENTICATION_FAILED);
         }
         System.out.println("- 데이터베이스 접속 성공");
     }
