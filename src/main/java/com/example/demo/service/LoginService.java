@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorType;
+import com.example.demo.exception.domain.UserException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,13 +15,13 @@ public class LoginService {
             throw new RuntimeException("예상치 못한 갑작스러운 예외/오류 발생");
         }
         if (!StringUtils.hasLength(username)) {
-            throw new CustomException(ErrorType.USERNAME_NOT_EXIST);
+            throw new UserException(ErrorType.USERNAME_NOT_EXIST);
         }
         if (!StringUtils.hasLength(password)) {
-            throw new CustomException(ErrorType.PASSWORD_NOT_EXIST);
+            throw new UserException(ErrorType.PASSWORD_NOT_EXIST);
         }
         if (!username.equals("admin") || !password.equals("1234")) {
-            throw new CustomException(ErrorType.AUTHENTICATION_FAILED);
+            throw new UserException(ErrorType.AUTHENTICATION_FAILED);
         }
         System.out.println("- 데이터베이스 접속 성공");
     }
